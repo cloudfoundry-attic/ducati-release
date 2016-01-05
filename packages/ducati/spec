@@ -1,0 +1,8 @@
+---
+name: ducati
+
+dependencies:
+  - golang
+
+files:
+   - github.com/cloudfoundry-incubator/ducati/**/*
