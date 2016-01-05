@@ -1,0 +1,8 @@
+---
+name: ducati
+templates: {}
+
+packages:
+  - ducati
+
+properties: {}
