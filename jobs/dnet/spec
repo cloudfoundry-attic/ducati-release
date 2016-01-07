@@ -1,0 +1,10 @@
+---
+name: dnet
+templates:
+ dnet_ctl.erb: bin/dnet_ctl
+ config.toml.erb: config/dnet.toml
+
+packages:
+  - dnet
+
+properties: {}

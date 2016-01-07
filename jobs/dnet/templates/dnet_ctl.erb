@@ -1,0 +1,37 @@
+#! /bin/bash
+set -exu
+
+RUN_DIR=/var/vcap/sys/run/dnet
+LOG_DIR=/var/vcap/sys/log/dnet
+CONF_DIR=/var/vcap/jobs/dnet/config
+PIDFILE=$RUN_DIR/dnet.pid
+
+mkdir -p $RUN_DIR
+chown -R vcap:vcap $RUN_DIR
+
+mkdir -p $LOG_DIR
+chown -R vcap:vcap $LOG_DIR
+
+case $1 in
+
+  start)
+    echo $$ > $PIDFILE
+
+    exec /var/vcap/packages/dnet/bin/dnet \
+       -d \
+       -c $CONF_DIR/dnet.toml \
+       -H 127.0.0.1:2385 \
+      2> >(tee -a $LOG_DIR/dnet.stderr.log | logger -p user.error -t vcap.dnet) \
+      1> >(tee -a $LOG_DIR/dnet.stdout.log | logger -p user.info -t vcap.dnet)
+    ;;
+
+  stop)
+    kill -9 $(cat $PIDFILE)
+    rm -f $PIDFILE
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+    ;;
+
+esac

@@ -9,6 +9,8 @@ releases:
     version: latest
   - name: ducati
     version: latest
+  - name: consul
+    version: latest
 
 jobs:
   - name: garden
@@ -16,8 +18,10 @@ jobs:
     templates:
       - name: garden
         release: guardian
-      - name: ducati
+      - name: dnet
         release: ducati
+      - name: consul_agent
+        release: consul
     resource_pool: garden
     networks:
       - name: garden
@@ -25,13 +29,20 @@ jobs:
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
+      consul:
+        agent:
+          mode: server
+          servers:
+            lan:
+             - 10.244.16.6
+        require_ssl: false
 
 networks:
   - name: garden
     subnets:
       - range: 10.244.16.4/30
         reserved: [10.244.16.5]
-        static: []
+        static: [10.244.16.6]
         cloud_properties:
           name: random
       - range: 10.244.16.8/30
