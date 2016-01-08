@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e -x
+
+ROOT_DIR_PATH=$(cd $(dirname $0)/.. && pwd)
+cd $ROOT_DIR_PATH
+
+docker run --privileged \
+   -v $PWD:/ducati-release \
+   -e GOPATH=/ducati-release \
+   -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati \
+   c2cnetworking/ducati-dev \
+   ginkgo -r $@

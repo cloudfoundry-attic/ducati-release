@@ -21,3 +21,5 @@ RUN cd /gopath/src/github.com/docker/libnetwork/cmd/dnet && godep go install .
 
 ADD src/github.com/onsi /gopath/src/github.com/onsi
 RUN go install github.com/onsi/ginkgo/ginkgo
+
+CMD /bin/sh
