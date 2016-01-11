@@ -13,3 +13,15 @@
 [submodule "src/github.com/appc/cni"]
 	path = src/github.com/appc/cni
 	url = https://github.com/cloudfoundry-incubator/ducati-release.git
+[submodule "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"]
+	path = src/github.com/cloudfoundry-incubator/ducati-cni-plugins
+	url = https://github.com/cloudfoundry-incubator/ducati-cni-plugins
+	branch = master
+[submodule "src/github.com/coreos/go-iptables"]
+	path = src/github.com/coreos/go-iptables
+	url = https://github.com/coreos/go-iptables
+	branch = master
+[submodule "src/github.com/vishvananda/netlink"]
+	path = src/github.com/vishvananda/netlink
+	url = https://github.com/vishvananda/netlink
+	branch = master
