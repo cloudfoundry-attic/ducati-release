@@ -1,0 +1,14 @@
+set -e -x
+
+export GOROOT=$(readlink -nf /var/vcap/packages/golang)
+export GOPATH=${BOSH_INSTALL_TARGET}
+export PATH=${GOROOT}/bin:${PATH}
+
+REPO_NAME=github.com/appc/cni
+
+pushd ${REPO_NAME}
+  rm -rf bin gopath
+  ./build
+popd
+
+cp -a ${REPO_NAME}/bin ${BOSH_INSTALL_TARGET}

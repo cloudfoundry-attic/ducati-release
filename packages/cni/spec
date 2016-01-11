@@ -1,0 +1,8 @@
+---
+name: cni
+
+dependencies:
+  - golang
+
+files:
+  - github.com/appc/cni/**/*

@@ -10,3 +10,6 @@
 [submodule "src/github.com/docker/libnetwork"]
 	path = src/github.com/docker/libnetwork
 	url = https://github.com/docker/libnetwork
+[submodule "src/github.com/appc/cni"]
+	path = src/github.com/appc/cni
+	url = https://github.com/cloudfoundry-incubator/ducati-release.git
