@@ -1,6 +1,0 @@
-check process dnet
-  with pidfile /var/vcap/sys/run/dnet/dnet.pid
-  depends on consul_agent
-  start program "/var/vcap/jobs/dnet/bin/dnet_ctl start"
-  stop program "/var/vcap/jobs/dnet/bin/dnet_ctl stop" with timeout 45 seconds
-  group vcap

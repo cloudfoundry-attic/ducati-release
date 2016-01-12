@@ -18,10 +18,8 @@ jobs:
     templates:
       - name: garden
         release: guardian
-      - name: dnet
+      - name: ducati
         release: ducati
-      - name: consul_agent
-        release: consul
     resource_pool: garden
     networks:
       - name: garden
@@ -29,13 +27,6 @@ jobs:
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
-      consul:
-        agent:
-          mode: server
-          servers:
-            lan:
-             - 10.244.16.6
-        require_ssl: false
 
 networks:
   - name: garden

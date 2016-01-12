@@ -1,9 +1,0 @@
----
-name: dnet
-
-dependencies:
-  - golang
-
-files:
-  - dnet/ipam-config-648.patch
-  - github.com/docker/libnetwork/**/*
