@@ -12,7 +12,7 @@
 	url = https://github.com/docker/libnetwork
 [submodule "src/github.com/appc/cni"]
 	path = src/github.com/appc/cni
-	url = https://github.com/cloudfoundry-incubator/ducati-release.git
+	url = https://github.com/appc/cni
 [submodule "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"]
 	path = src/github.com/cloudfoundry-incubator/ducati-cni-plugins
 	url = https://github.com/cloudfoundry-incubator/ducati-cni-plugins
