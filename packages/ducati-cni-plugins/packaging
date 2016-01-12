@@ -7,4 +7,4 @@ export GOROOT=$(readlink -nf /var/vcap/packages/golang)
 export GOPATH=$BOSH_INSTALL_TARGET
 export PATH=$GOROOT/bin:$PATH
 
-go install github.com/cloudfoundry-incubator/ducati-cni-plugins/plugins/main/vxlan
+go install github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan

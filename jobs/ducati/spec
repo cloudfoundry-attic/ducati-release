@@ -4,6 +4,8 @@ templates: {}
 
 packages:
   - ducati
+  - cni
+  - ducati-cni-plugins
 
 properties: {}
 

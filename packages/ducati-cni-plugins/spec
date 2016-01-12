@@ -11,7 +11,7 @@ files:
   - github.com/appc/cni/pkg/ns/*.go # gosub
   - github.com/appc/cni/pkg/skel/*.go # gosub
   - github.com/appc/cni/pkg/types/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/plugins/main/vxlan/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
   - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
