@@ -5,6 +5,7 @@ ROOT_DIR_PATH=$(cd $(dirname $0)/.. && pwd)
 cd $ROOT_DIR_PATH
 
 docker run --privileged \
+   --rm \
    -it \
    -v $PWD:/ducati-release \
    -e GOPATH=/ducati-release \
