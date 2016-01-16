@@ -1,6 +1,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/ducati"]
 	path = src/github.com/cloudfoundry-incubator/ducati
 	url = https://github.com/cloudfoundry-incubator/ducati
+	branch = master
 [submodule "src/github.com/onsi/ginkgo"]
 	path = src/github.com/onsi/ginkgo
 	url = https://github.com/onsi/ginkgo
@@ -13,7 +14,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"]
 	path = src/github.com/cloudfoundry-incubator/ducati-cni-plugins
 	url = https://github.com/cloudfoundry-incubator/ducati-cni-plugins
-	branch = master
+	branch = new-cni-refactor
 [submodule "src/github.com/coreos/go-iptables"]
 	path = src/github.com/coreos/go-iptables
 	url = https://github.com/coreos/go-iptables
@@ -25,6 +26,8 @@
 [submodule "src/github.com/cloudfoundry-incubator/genclient"]
 	path = src/github.com/cloudfoundry-incubator/genclient
 	url = https://github.com/cloudfoundry-incubator/genclient
+	branch = master
 [submodule "src/github.com/pivotal-golang/lager"]
 	path = src/github.com/pivotal-golang/lager
 	url = https://github.com/pivotal-golang/lager
+	branch = master

@@ -36,6 +36,8 @@ function sync_package() {
 }
 
 sync_package ducati-cni-plugins  -app  github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan &
+sync_package ducati           -app  github.com/appc/cni/cnitool   -app  github.com/cloudfoundry-incubator/ducati -app  github.com/appc/cni/plugins/main/bridge &
+sync_package cni                 -app  github.com/appc/cni/plugins/main/bridge -app github.com/appc/cni/cnitool &
 
 wait
 

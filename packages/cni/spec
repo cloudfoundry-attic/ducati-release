@@ -5,4 +5,16 @@ dependencies:
   - golang
 
 files:
-  - github.com/appc/cni/**/*
+  - "github.com/appc/cni/**/*"
+  - github.com/appc/cni/cnitool/*.go # gosub
+  - github.com/appc/cni/libcni/*.go # gosub
+  - github.com/appc/cni/pkg/invoke/*.go # gosub
+  - github.com/appc/cni/pkg/ip/*.go # gosub
+  - github.com/appc/cni/pkg/ipam/*.go # gosub
+  - github.com/appc/cni/pkg/ns/*.go # gosub
+  - github.com/appc/cni/pkg/skel/*.go # gosub
+  - github.com/appc/cni/pkg/types/*.go # gosub
+  - github.com/appc/cni/plugins/main/bridge/*.go # gosub
+  - github.com/appc/cni/Godeps/_workspace/src/github.com/coreos/go-iptables/iptables/*.go # gosub
+  - github.com/appc/cni/Godeps/_workspace/src/github.com/vishvananda/netlink/*.go # gosub
+  - github.com/appc/cni/Godeps/_workspace/src/github.com/vishvananda/netlink/nl/*.go # gosub
