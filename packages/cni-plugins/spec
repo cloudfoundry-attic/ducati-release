@@ -1,5 +1,5 @@
 ---
-name: ducati-cni-plugins
+name: cni-plugins
 
 dependencies:
   - golang
@@ -11,6 +11,10 @@ files:
   - github.com/appc/cni/pkg/ns/*.go # gosub
   - github.com/appc/cni/pkg/skel/*.go # gosub
   - github.com/appc/cni/pkg/types/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/backend/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
+  - github.com/appc/cni/plugins/main/bridge/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/links/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub

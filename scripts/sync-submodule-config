@@ -8,13 +8,16 @@ go install github.com/vito/gosub
 
 {
   gosub list \
-    -app github.com/cloudfoundry-incubator/ducati-cni-plugins/plugins/... \
+    -app github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan \
     -app github.com/cloudfoundry-incubator/ducati/... \
-    -app github.com/cloudfoundry-incubator/appc/cni/...
+    -app github.com/appc/cni/plugins/main/bridge \
+    -app github.com/appc/cni/plugins/ipam/host-local
 
   gosub list \
       -test github.com/cloudfoundry-incubator/ducati-cni-plugins/... \
-      -test github.com/cloudfoundry-incubator/ducati/...
+      -test github.com/cloudfoundry-incubator/ducati/... \
+      -test github.com/cloudfoundry-incubator/genclient/...
+
 } > /tmp/packages
 
 cat /tmp/packages | xargs gosub sync

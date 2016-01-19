@@ -1,10 +1,15 @@
-set -e
+#!/bin/bash
+set -eu
 
 mkdir -p ${BOSH_INSTALL_TARGET}/src
 cp -a . ${BOSH_INSTALL_TARGET}/src
 
 export GOROOT=$(readlink -nf /var/vcap/packages/golang)
-export GOPATH=$BOSH_INSTALL_TARGET
+export GOPATH=${BOSH_INSTALL_TARGET}
 export PATH=$GOROOT/bin:$PATH
 
 go install github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan
+
+export GOPATH=$GOPATH:$PWD/github.com/appc/cni/Godeps/_workspace
+go install github.com/appc/cni/plugins/main/bridge
+go install github.com/appc/cni/plugins/ipam/host-local
