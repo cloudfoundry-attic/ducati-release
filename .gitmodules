@@ -14,7 +14,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"]
 	path = src/github.com/cloudfoundry-incubator/ducati-cni-plugins
 	url = https://github.com/cloudfoundry-incubator/ducati-cni-plugins
-	branch = new-cni-refactor
+	branch = master
 [submodule "src/github.com/coreos/go-iptables"]
 	path = src/github.com/coreos/go-iptables
 	url = https://github.com/coreos/go-iptables
@@ -22,6 +22,10 @@
 [submodule "src/github.com/vishvananda/netlink"]
 	path = src/github.com/vishvananda/netlink
 	url = https://github.com/vishvananda/netlink
+	branch = master
+[submodule "src/github.com/vishvananda/netns"]
+	path = src/github.com/vishvananda/netns
+	url = https://github.com/vishvananda/netns
 	branch = master
 [submodule "src/github.com/cloudfoundry-incubator/genclient"]
 	path = src/github.com/cloudfoundry-incubator/genclient
