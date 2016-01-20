@@ -9,8 +9,6 @@ releases:
     version: latest
   - name: ducati
     version: latest
-  - name: consul
-    version: latest
 
 jobs:
   - name: garden
