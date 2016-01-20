@@ -11,3 +11,5 @@ files:
   - github.com/cloudfoundry-incubator/ducati/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/controller/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/transport/*.go # gosub
+  - github.com/vishvananda/netlink/*.go # gosub
+  - github.com/vishvananda/netlink/nl/*.go # gosub
