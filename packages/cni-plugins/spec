@@ -5,6 +5,7 @@ dependencies:
   - golang
 
 files:
+  - github.com/appc/cni/scripts/*
   - github.com/appc/cni/pkg/invoke/*.go # gosub
   - github.com/appc/cni/pkg/ip/*.go # gosub
   - github.com/appc/cni/pkg/ipam/*.go # gosub
@@ -16,12 +17,10 @@ files:
   - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
   - github.com/appc/cni/plugins/main/bridge/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ip/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/links/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/overlay/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/veth/*.go # gosub
   - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
-  - github.com/vishvananda/netns/*.go # gosub
