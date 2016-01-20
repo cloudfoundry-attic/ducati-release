@@ -13,3 +13,4 @@ files:
   - github.com/cloudfoundry-incubator/ducati/transport/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
+  - github.com/vishvananda/netns/*.go # gosub
