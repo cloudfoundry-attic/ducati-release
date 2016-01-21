@@ -1,21 +1,17 @@
 # ducati-release
 
-Co-locate this release with [guardian-release](https://github.com/cloudfoundry-incubator/guardian-release)
-
-Then configure guardian to use the `ducati` external networker instead of the built-in one.
+This release co-locates both `etcd` and `guardian`, see below for instructions
 
 ## Dependencies
 
-- [consul-release](https://github.com/cloudfoundry-incubator/consul-release)
+- [etcd-release](https://github.com/cloudfoundry-incubator/etcd-release)
 - [guardian-release](https://github.com/cloudfoundry-incubator/guardian-release)
 
 ## Getting started
 ```bash
-pushd ~/workspace/consul-release
+pushd ~/workspace/etcd-release
   git pull
-  git submodule update --init --recursive
-  bosh create release
-  bosh upload release
+  bosh upload release releases/etcd-26.yml
 popd
 
 pushd ~/workspace/guardian-release
@@ -35,3 +31,9 @@ popd
 bosh deployment manifests/bosh-lite.yml
 bosh -n deploy
 ```
+
+## Caveats
+
+- ETCD needs to be used with caution
+- The architecture of this whole system is shifting
+- Deploy only if you know how

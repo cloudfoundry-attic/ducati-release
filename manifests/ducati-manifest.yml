@@ -9,6 +9,8 @@ releases:
     version: latest
   - name: ducati
     version: latest
+  - name: etcd
+    version: latest
 
 jobs:
   - name: garden
@@ -18,6 +20,8 @@ jobs:
         release: guardian
       - name: ducati
         release: ducati
+      - name: etcd
+        release: etcd
     resource_pool: garden
     networks:
       - name: garden
@@ -25,6 +29,14 @@ jobs:
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
+      etcd:
+        machines:
+          - networks.garden[0].subnets[0].static[0]
+        cluster:
+          - name: "garden"
+            instances: 1
+        peer_require_ssl: false
+        require_ssl: false
 
 networks:
   - name: garden
