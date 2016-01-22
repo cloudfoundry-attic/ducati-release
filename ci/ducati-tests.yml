@@ -7,6 +7,6 @@ inputs:
 - name: ducati-release
 
 run:
-  path: ducati-release/ci/ducati-test.sh
+  path: ducati-release/ci/ducati-tests.sh
 
 params: {}
