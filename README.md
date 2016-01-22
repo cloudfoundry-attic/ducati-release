@@ -8,6 +8,17 @@ This release co-locates both `etcd` and `guardian`, see below for instructions
 - [guardian-release](https://github.com/cloudfoundry-incubator/guardian-release)
 
 ## Getting started
+
+### Clone the dependencies
+```bash
+pushd ~/workspace
+  git clone https://github.com/cloudfoundry-incubator/ducati-release
+  git clone https://github.com/cloudfoundry-incubator/etcd-release
+  git clone https://github.com/cloudfoundry-incubator/guardian-release
+popd
+```
+
+### Deploy the releases
 ```bash
 pushd ~/workspace/etcd-release
   git pull
@@ -24,11 +35,10 @@ popd
 pushd ~/workspace/ducati-release
   git pull
   git submodule update --init --recursive
-  bosh create release
-  bosh upload release
+  bosh create release --force && bosh -n upload release
+  bosh deployment manifests/ducati-manifest.yml
 popd
 
-bosh deployment manifests/ducati-manifest.yml
 bosh -n deploy
 ```
 
