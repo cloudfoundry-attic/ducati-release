@@ -1,0 +1,12 @@
+---
+image: docker:///c2cnetworking/ducati-dev
+
+platform: linux
+
+inputs:
+- name: ducati-release
+
+run:
+  path: ducati-release/ci/ducati-test.sh
+
+params: {}
