@@ -34,3 +34,4 @@
 [submodule "src/golang.org/x/sys"]
 	path = src/golang.org/x/sys
 	url = https://go.googlesource.com/sys
+	branch = master
