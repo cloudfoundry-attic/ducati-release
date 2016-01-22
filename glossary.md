@@ -9,6 +9,8 @@
   ([ref](http://man7.org/linux/man-pages/man7/namespaces.7.html))
 - `vxlan`: an implementation of an overlay network which encapsulates ethernet frames inside UDP packets
   the Linux kernel has vxlan support
+- `oci`: the Open Container Initiative, an evolving standard that Docker, Rocket, and Guardian are coding against
+- `cni`: the Container Network Interface
 
 ## tools
 - `ip`
@@ -18,5 +20,4 @@
   - `bridge fdb`
 - `iptables`
 - `ifconfig`
-
-
+- `runc`: a reference implementation of the `oci` spec; a CLI for creating containers
