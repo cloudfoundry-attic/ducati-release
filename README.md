@@ -11,7 +11,7 @@ This release co-locates both `etcd` and `guardian`, see below for instructions
 ```bash
 pushd ~/workspace/etcd-release
   git pull
-  bosh upload release releases/etcd-26.yml
+  bosh upload release releases/etcd/etcd-26.yml
 popd
 
 pushd ~/workspace/guardian-release
@@ -28,7 +28,7 @@ pushd ~/workspace/ducati-release
   bosh upload release
 popd
 
-bosh deployment manifests/bosh-lite.yml
+bosh deployment manifests/ducati-manifest.yml
 bosh -n deploy
 ```
 
