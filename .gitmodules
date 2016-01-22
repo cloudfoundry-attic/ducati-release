@@ -23,10 +23,6 @@
 	path = src/github.com/vishvananda/netlink
 	url = https://github.com/vishvananda/netlink
 	branch = master
-[submodule "src/github.com/vishvananda/netns"]
-	path = src/github.com/vishvananda/netns
-	url = https://github.com/vishvananda/netns
-	branch = master
 [submodule "src/github.com/cloudfoundry-incubator/genclient"]
 	path = src/github.com/cloudfoundry-incubator/genclient
 	url = https://github.com/cloudfoundry-incubator/genclient

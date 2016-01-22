@@ -7,10 +7,9 @@ dependencies:
 files:
   - github.com/appc/cni/libcni/*.go # gosub
   - github.com/appc/cni/pkg/invoke/*.go # gosub
+  - github.com/appc/cni/pkg/ns/*.go # gosub
   - github.com/appc/cni/pkg/types/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/controller/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati/transport/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
-  - github.com/vishvananda/netns/*.go # gosub
