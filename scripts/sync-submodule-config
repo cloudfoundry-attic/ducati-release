@@ -16,7 +16,6 @@ go install github.com/vito/gosub
   gosub list \
       -test github.com/cloudfoundry-incubator/ducati-cni-plugins/... \
       -test github.com/cloudfoundry-incubator/ducati/... \
-      -test github.com/cloudfoundry-incubator/genclient/...
 
 } > /tmp/packages
 
