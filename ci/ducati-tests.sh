@@ -6,10 +6,10 @@ cd ducati-release
 export GOPATH=$PWD
 
 pushd src/github.com/cloudfoundry-incubator/ducati-cni-plugins
-  ginkgo -r
+  ginkgo -r -failFast -randomizeAllSpecs
 popd
 
 pushd src/github.com/cloudfoundry-incubator/ducati
-  ginkgo -r
+  ginkgo -r -failFast -randomizeAllSpecs
 popd
 
