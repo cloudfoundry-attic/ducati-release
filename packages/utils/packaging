@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+
+cp -a ./utils/* ${BOSH_INSTALL_TARGET}/

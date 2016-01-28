@@ -5,6 +5,7 @@ templates: {}
 packages:
   - ducati
   - cni-plugins
+  - utils
 
 properties: {}
 
