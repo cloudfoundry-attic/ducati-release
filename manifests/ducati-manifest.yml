@@ -1,5 +1,5 @@
 ---
-name: guardian
+name: ducati-guardian
 
 # replace with bosh status --uuid
 director_uuid: <%= `bosh target lite > /dev/null 2>&1 && bosh status --uuid` %>
@@ -8,8 +8,6 @@ releases:
   - name: guardian
     version: latest
   - name: ducati
-    version: latest
-  - name: etcd
     version: latest
 
 jobs:
@@ -20,8 +18,6 @@ jobs:
         release: guardian
       - name: ducati
         release: ducati
-      - name: etcd
-        release: etcd
     resource_pool: garden
     networks:
       - name: garden
@@ -29,47 +25,17 @@ jobs:
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
-      etcd:
-        machines:
-          - networks.garden[0].subnets[0].static[0]
-        cluster:
-          - name: "garden"
-            instances: 1
-        peer_require_ssl: false
-        require_ssl: false
 
 networks:
   - name: garden
     subnets:
-      - range: 10.244.16.4/30
-        reserved: [10.244.16.5]
+      - range: 10.244.16.0/24
+        reserved: [10.244.16.1]
         static: [10.244.16.6]
-        cloud_properties:
-          name: random
-      - range: 10.244.16.8/30
-        reserved: [10.244.16.9]
-        static: []
-        cloud_properties:
-          name: random
-      - range: 10.244.16.12/30
-        reserved: [10.244.16.13]
-        static: []
-        cloud_properties:
-          name: random
-      - range: 10.244.16.16/30
-        reserved: [10.244.16.17]
-        static: []
-        cloud_properties:
-          name: random
-      - range: 10.244.16.20/30
-        reserved: [10.244.16.21]
-        static: []
         cloud_properties:
           name: random
 
 resource_pools:
-  # not much point in having more than one resource pool, since it's all
-  # in one VM with the same hardware anyway
   - name: garden
     network: garden
     stemcell:
