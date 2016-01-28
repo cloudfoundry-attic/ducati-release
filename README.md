@@ -4,7 +4,6 @@ This release co-locates both `etcd` and `guardian`, see below for instructions
 
 ## Dependencies
 
-- [etcd-release](https://github.com/cloudfoundry-incubator/etcd-release)
 - [guardian-release](https://github.com/cloudfoundry-incubator/guardian-release)
 
 ## Getting started
@@ -13,18 +12,12 @@ This release co-locates both `etcd` and `guardian`, see below for instructions
 ```bash
 pushd ~/workspace
   git clone https://github.com/cloudfoundry-incubator/ducati-release
-  git clone https://github.com/cloudfoundry-incubator/etcd-release
   git clone https://github.com/cloudfoundry-incubator/guardian-release
 popd
 ```
 
 ### Deploy the releases
 ```bash
-pushd ~/workspace/etcd-release
-  git pull
-  bosh upload release releases/etcd/etcd-26.yml
-popd
-
 pushd ~/workspace/guardian-release
   git pull
   git submodule update --init --recursive
@@ -44,6 +37,5 @@ bosh -n deploy
 
 ## Caveats
 
-- ETCD needs to be used with caution
 - The architecture of this whole system is shifting
 - Deploy only if you know how
