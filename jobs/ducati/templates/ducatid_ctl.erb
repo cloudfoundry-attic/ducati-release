@@ -21,6 +21,7 @@ case $1 in
     echo $$ > $PIDFILE
 
     exec /var/vcap/packages/ducati-daemon/bin/ducatid \
+	  -listenAddr=<%= p("ducatid.listen_address") %> \
       1>>$LOG_DIR/ducatid.stdout.log \
       2>>$LOG_DIR/ducatid.stderr.log
 
@@ -28,8 +29,7 @@ case $1 in
 
   stop)
 
-    kill -TERM $(cat $PIDFILE)
-    kill -KILL $(cat $PIDFILE) || true
+    kill -INT $(cat $PIDFILE)
 
     ;;
 

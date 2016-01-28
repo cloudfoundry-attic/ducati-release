@@ -9,5 +9,8 @@ packages:
   - utils
   - ducati-daemon
 
-properties: {}
+properties:
+  ducatid.listen_address:
+    description: "Ducati listening address"
+    default: 0.0.0.0:4001
 

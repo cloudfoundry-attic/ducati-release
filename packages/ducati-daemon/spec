@@ -6,4 +6,10 @@ dependencies:
 
 files:
 
+  - github.com/bmizerany/pat/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub
+  - github.com/tedsuo/ifrit/*.go # gosub
+  - github.com/tedsuo/ifrit/grouper/*.go # gosub
+  - github.com/tedsuo/ifrit/http_server/*.go # gosub
+  - github.com/tedsuo/ifrit/sigmon/*.go # gosub
+  - github.com/tedsuo/rata/*.go # gosub
