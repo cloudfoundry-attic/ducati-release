@@ -18,6 +18,7 @@ popd
 
 ### Deploy the releases
 ```bash
+bosh target lite
 pushd ~/workspace/guardian-release
   git pull
   git submodule update --init --recursive
