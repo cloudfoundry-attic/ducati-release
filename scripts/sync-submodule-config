@@ -1,6 +1,7 @@
 #!/bin/bash
- 
-set -e -x
+
+set -e -x -u
+cd $GOPATH
 
 # ensure gosub is installed (this will recompile it only if necessary)
 go get github.com/vito/gosub
@@ -8,7 +9,8 @@ go install github.com/vito/gosub
 
 {
   gosub list \
-    -app github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan \
+    -app github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/... \
+    -app github.com/cloudfoundry-incubator/ducati-daemon/cmd/... \
     -app github.com/cloudfoundry-incubator/ducati/... \
     -app github.com/appc/cni/plugins/main/bridge \
     -app github.com/appc/cni/plugins/ipam/host-local

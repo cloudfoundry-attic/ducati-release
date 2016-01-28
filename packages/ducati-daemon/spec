@@ -1,0 +1,9 @@
+---
+name: ducati-daemon
+
+dependencies:
+  - golang
+
+files:
+
+  - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub

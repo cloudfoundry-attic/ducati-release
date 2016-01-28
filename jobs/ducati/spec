@@ -6,6 +6,7 @@ packages:
   - ducati
   - cni-plugins
   - utils
+  - ducati-daemon
 
 properties: {}
 

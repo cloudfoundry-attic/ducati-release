@@ -41,6 +41,8 @@ sync_package cni-plugins  -app  github.com/cloudfoundry-incubator/ducati-cni-plu
                           -app  github.com/appc/cni/plugins/main/bridge \
                           -app  github.com/appc/cni/plugins/ipam/host-local &
 
+sync_package ducati-daemon -app github.com/cloudfoundry-incubator/ducati-daemon/cmd/... &
+
 wait
 
 git diff --name-only packages/*/spec

@@ -23,11 +23,11 @@
 	path = src/github.com/vishvananda/netlink
 	url = https://github.com/vishvananda/netlink
 	branch = master
-[submodule "src/github.com/pivotal-golang/lager"]
-	path = src/github.com/pivotal-golang/lager
-	url = https://github.com/pivotal-golang/lager
-	branch = master
 [submodule "src/golang.org/x/sys"]
 	path = src/golang.org/x/sys
 	url = https://go.googlesource.com/sys
+	branch = master
+[submodule "src/github.com/cloudfoundry-incubator/ducati-daemon"]
+	path = src/github.com/cloudfoundry-incubator/ducati-daemon
+	url = https://github.com/cloudfoundry-incubator/ducati-daemon
 	branch = master
