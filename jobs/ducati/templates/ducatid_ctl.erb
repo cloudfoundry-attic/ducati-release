@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e -u
+
+RUN_DIR=/var/vcap/sys/run/ducati
+LOG_DIR=/var/vcap/sys/log/ducati
+PIDFILE=$RUN_DIR/ducatid.pid
+
+mkdir -p /var/vcap/sys/log/monit
+exec 1>> /var/vcap/sys/log/monit/ducatid.out.log
+exec 2>> /var/vcap/sys/log/monit/ducatid.err.log
+
+
+case $1 in
+
+  start)
+
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    exec /var/vcap/packages/ducati-daemon/bin/ducatid \
+      1>>$LOG_DIR/ducatid.stdout.log \
+      2>>$LOG_DIR/ducatid.stderr.log
+
+    ;;
+
+  stop)
+
+    kill -TERM $(cat $PIDFILE)
+    kill -KILL $(cat $PIDFILE) || true
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

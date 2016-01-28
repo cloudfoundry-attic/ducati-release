@@ -1,0 +1,5 @@
+check process ducatid
+  with pidfile /var/vcap/sys/run/ducati/ducatid.pid
+  start program "/var/vcap/jobs/ducati/bin/ducatid_ctl start"
+  stop program "/var/vcap/jobs/ducati/bin/ducatid_ctl stop"
+  group vcap

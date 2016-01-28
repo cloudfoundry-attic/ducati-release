@@ -1,6 +1,7 @@
 ---
 name: ducati
-templates: {}
+templates:
+  ducatid_ctl.erb: bin/ducatid_ctl
 
 packages:
   - ducati
