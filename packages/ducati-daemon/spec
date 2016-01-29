@@ -12,6 +12,7 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
+  - github.com/pivotal-golang/lager/*.go # gosub
   - github.com/tedsuo/ifrit/*.go # gosub
   - github.com/tedsuo/ifrit/grouper/*.go # gosub
   - github.com/tedsuo/ifrit/http_server/*.go # gosub

@@ -43,3 +43,7 @@
 	path = src/github.com/bmizerany/pat
 	url = https://github.com/bmizerany/pat
 	branch = master
+[submodule "src/github.com/pivotal-golang/lager"]
+	path = src/github.com/pivotal-golang/lager
+	url = https://github.com/pivotal-golang/lager
+	branch = master
