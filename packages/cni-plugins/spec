@@ -6,6 +6,7 @@ dependencies:
 
 files:
   - github.com/appc/cni/scripts/*
+  - github.com/appc/cni/libcni/*.go # gosub
   - github.com/appc/cni/pkg/invoke/*.go # gosub
   - github.com/appc/cni/pkg/ip/*.go # gosub
   - github.com/appc/cni/pkg/ipam/*.go # gosub
@@ -23,6 +24,8 @@ files:
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ns/*.go # gosub
+  - github.com/cloudfoundry-incubator/guardian-cni-adapter/*.go # gosub
+  - github.com/cloudfoundry-incubator/guardian-cni-adapter/controller/*.go # gosub
   - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub

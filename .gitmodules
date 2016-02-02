@@ -47,3 +47,7 @@
 	path = src/github.com/pivotal-golang/lager
 	url = https://github.com/pivotal-golang/lager
 	branch = master
+[submodule "src/github.com/cloudfoundry-incubator/guardian-cni-adapter"]
+	path = src/github.com/cloudfoundry-incubator/guardian-cni-adapter
+	url = https://github.com/cloudfoundry-incubator/guardian-cni-adapter
+	branch = master
