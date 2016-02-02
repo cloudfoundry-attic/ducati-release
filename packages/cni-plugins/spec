@@ -17,10 +17,12 @@ files:
   - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
   - github.com/appc/cni/plugins/main/bridge/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/executor/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ip/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/links/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ns/*.go # gosub
   - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
