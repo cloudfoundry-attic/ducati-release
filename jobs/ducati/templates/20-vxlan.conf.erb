@@ -1,0 +1,12 @@
+{
+    "name": "ducati-vxlan",
+    "type": "vxlan",
+    "network": "192.168.2.0/24",
+    "ipam": {
+        "type": "host-local",
+        "subnet": "192.168.2.0/24",
+        "routes": [
+            { "dst": "192.168.2.0/24" }
+        ]
+    }
+}

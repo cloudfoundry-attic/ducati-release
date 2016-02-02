@@ -2,6 +2,8 @@
 name: ducati
 templates:
   ducatid_ctl.erb: bin/ducatid_ctl
+  10-bridge.conf.erb: cni-conf/10-bridge.conf
+  20-vxlan.conf.erb: cni-conf/20-vxlan.conf
 
 packages:
   - ducati
