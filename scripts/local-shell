@@ -9,6 +9,6 @@ docker run --privileged \
    -it \
    -v $PWD:/ducati-release \
    -e GOPATH=/ducati-release \
-   -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati \
+   -w /ducati-release \
    c2cnetworking/ducati-dev \
-   /bin/sh
+   /bin/bash

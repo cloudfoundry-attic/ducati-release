@@ -8,6 +8,14 @@ docker run --privileged \
    --rm \
    -v $PWD:/ducati-release \
    -e GOPATH=/ducati-release \
+   -w /ducati-release/src/integration \
+   c2cnetworking/ducati-dev \
+   ginkgo -r $@
+
+docker run --privileged \
+   --rm \
+   -v $PWD:/ducati-release \
+   -e GOPATH=/ducati-release \
    -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati-cni-plugins \
    c2cnetworking/ducati-dev \
    ginkgo -r $@
