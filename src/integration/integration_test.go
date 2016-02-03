@@ -56,12 +56,6 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	})
 
 	AfterEach(func() {
-		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
-		Expect(err).NotTo(HaveOccurred())
-		session, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
-		Expect(err).NotTo(HaveOccurred())
-		Eventually(session).Should(gexec.Exit(0))
-
 		Expect(containerNS.Destroy()).To(Succeed())
 		Expect(os.RemoveAll(repoDir)).To(Succeed())
 
@@ -73,7 +67,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		return err
 	}
 
-	It("should inform the daemon of the container's ID and IP", func() {
+	It("should maintain the container state in the daemon", func() {
 		url := fmt.Sprintf("http://%s/containers", address)
 		Eventually(serverIsAvailable).Should(Succeed())
 
@@ -105,5 +99,23 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(respBytes).To(MatchJSON(fmt.Sprintf(`[{"id": "%s"}]`, containerID)))
+
+		By("invoking the vxlan CNI plugin with the DELETE action")
+		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
+		Expect(err).NotTo(HaveOccurred())
+		session, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
+		Expect(err).NotTo(HaveOccurred())
+		Eventually(session).Should(gexec.Exit(0))
+
+		By("checking that the daemon now has non containers saved")
+		resp, err = http.Get(url)
+		Expect(err).NotTo(HaveOccurred())
+		defer resp.Body.Close()
+
+		Expect(resp.StatusCode).To(Equal(http.StatusOK))
+		respBytes, err = ioutil.ReadAll(resp.Body)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(respBytes).To(MatchJSON(`[]`))
 	})
 })
