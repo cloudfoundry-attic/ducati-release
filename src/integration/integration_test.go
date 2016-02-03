@@ -23,18 +23,20 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		containerNS namespace.Namespace
 		containerID string
 		netConfig   Config
+		serverURL   string
 	)
 
 	BeforeEach(func() {
 		By("booting the daemon")
 		address = fmt.Sprintf("127.0.0.1:%d", 4001+GinkgoParallelNode())
+		serverURL = "http://" + address
 		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address)
 		var err error
 		session, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
 
 		By("creating a container")
-		containerID = fmt.Sprintf("%x", rand.Intn(9999))
+		containerID = fmt.Sprintf("%x", rand.Int31())
 		repoDir, err = ioutil.TempDir("", "namespaces-")
 		Expect(err).NotTo(HaveOccurred())
 
@@ -54,7 +56,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	})
 
 	AfterEach(func() {
-		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir)
+		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
 		Expect(err).NotTo(HaveOccurred())
 		session, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
@@ -87,13 +89,21 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(respBytes).To(MatchJSON(`[]`))
 
 		By("invoking the vxlan CNI plugin with the ADD action")
-		addCmd, err := buildCNICmd("ADD", netConfig, containerNS, containerID, repoDir)
+		addCmd, err := buildCNICmd("ADD", netConfig, containerNS, containerID, repoDir, serverURL)
 		Expect(err).NotTo(HaveOccurred())
 		session, err = gexec.Start(addCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
 
 		By("checking that the daemon now how the ID and IP of the container")
-		// TODO: write the failing part of the test
+		resp, err = http.Get(url)
+		Expect(err).NotTo(HaveOccurred())
+		defer resp.Body.Close()
+
+		Expect(resp.StatusCode).To(Equal(http.StatusOK))
+		respBytes, err = ioutil.ReadAll(resp.Body)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(respBytes).To(MatchJSON(fmt.Sprintf(`[{"id": "%s"}]`, containerID)))
 	})
 })

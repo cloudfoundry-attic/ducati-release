@@ -92,7 +92,7 @@ var _ = SynchronizedAfterSuite(func() {
 })
 
 func buildCNICmd(operation string, netConfig Config, containerNS namespace.Namespace,
-	containerID, sandboxRepoDir string) (*exec.Cmd, error) {
+	containerID, sandboxRepoDir, serverURL string) (*exec.Cmd, error) {
 
 	input, err := json.Marshal(netConfig)
 	if err != nil {
@@ -131,6 +131,7 @@ func buildCNICmd(operation string, netConfig Config, containerNS namespace.Names
 		fmt.Sprintf("CNI_IFNAME=%s", "vx-eth0"),
 		fmt.Sprintf("DUCATI_OS_SANDBOX_REPO=%s", sandboxRepoDir),
 		fmt.Sprintf("FAKE_IPAM_RESPONSE=%s", string(fakeIPAMResponseBytes)),
+		fmt.Sprintf("DAEMON_BASE_URL=%s", serverURL),
 	)
 
 	return cmd, nil

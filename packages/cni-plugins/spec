@@ -24,6 +24,9 @@ files:
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ns/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/guardian-cni-adapter/*.go # gosub
   - github.com/cloudfoundry-incubator/guardian-cni-adapter/controller/*.go # gosub
   - github.com/coreos/go-iptables/iptables/*.go # gosub
