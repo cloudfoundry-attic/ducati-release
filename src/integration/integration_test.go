@@ -1,6 +1,7 @@
 package integration_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -89,7 +90,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
 
-		By("checking that the daemon now how the ID and IP of the container")
+		By("checking that the daemon now has the container data")
 		resp, err = http.Get(url)
 		Expect(err).NotTo(HaveOccurred())
 		defer resp.Body.Close()
@@ -98,7 +99,24 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		respBytes, err = ioutil.ReadAll(resp.Body)
 		Expect(err).NotTo(HaveOccurred())
 
-		Expect(respBytes).To(MatchJSON(fmt.Sprintf(`[{"id": "%s"}]`, containerID)))
+		type containerData struct {
+			ID     string `json:"id"`
+			IP     string `json:"ip"`
+			MAC    string `json:"mac"`
+			HostIP string `json:"host_ip"`
+		}
+
+		var output []*containerData
+		err = json.Unmarshal(respBytes, &output)
+		Expect(err).NotTo(HaveOccurred())
+
+		hostIP, _, err := net.ParseCIDR(output[0].HostIP)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(output[0].ID).To(Equal(containerID))
+		Expect(output[0].IP).To(Equal("192.168.1.3"))
+		Expect(output[0].MAC).To(MatchRegexp("[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}"))
+		Expect(hostIP).NotTo(BeNil())
 
 		By("invoking the vxlan CNI plugin with the DELETE action")
 		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
