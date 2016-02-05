@@ -15,4 +15,5 @@ properties:
   ducatid.listen_address:
     description: "Ducati listening address"
     default: 0.0.0.0:4001
-
+  ducatid.etcd_machines:
+   description: "Addresses of etcd nodes in the store cluster"

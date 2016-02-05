@@ -1,4 +1,7 @@
 ---
+etcd_static_ips: &etcd_static_ips
+- 10.244.15.6
+
 name: ducati-guardian
 
 # replace with bosh status --uuid
@@ -9,10 +12,12 @@ releases:
     version: latest
   - name: ducati
     version: latest
+  - name: etcd
+    version: latest
 
 jobs:
   - name: garden
-    instances: 1
+    instances: 2
     templates:
       - name: garden
         release: guardian
@@ -22,11 +27,30 @@ jobs:
     networks:
       - name: garden
     properties:
+      ducatid:
+        etcd_machines: *etcd_static_ips
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
         network_plugin: /var/vcap/packages/cni-plugins/bin/guardian-cni-adapter
         network_plugin_extra_args: "--cniPluginDir=/var/vcap/packages/cni-plugins/bin,--cniConfigDir=/var/vcap/jobs/ducati/cni-conf,--ducatiSandboxDir=/var/vcap/data/ducati-sandbox,--daemonBaseURL=http://localhost:4001"
+  - name: etcd
+    instances: 1
+    templates:
+      - name: etcd
+        release: etcd
+    resource_pool: garden
+    networks:
+      - name: etcd
+        static_ips: *etcd_static_ips
+    properties:
+      etcd:
+        machines: *etcd_static_ips
+        cluster:
+          - name: etcd
+            instance: 1
+        peer_require_ssl: false
+        require_ssl: false
 
 networks:
   - name: garden
@@ -34,6 +58,13 @@ networks:
       - range: 10.244.16.0/24
         reserved: [10.244.16.1]
         static: [10.244.16.6]
+        cloud_properties:
+          name: random
+  - name: etcd
+    subnets:
+      - range: 10.244.15.0/24
+        reserved: [10.244.15.1]
+        static: *etcd_static_ips
         cloud_properties:
           name: random
 
