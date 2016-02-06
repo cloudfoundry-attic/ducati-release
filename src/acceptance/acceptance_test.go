@@ -2,6 +2,8 @@ package acceptance_test
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 
 	"github.com/cloudfoundry-incubator/garden"
 	"github.com/cloudfoundry-incubator/garden/client"
@@ -13,7 +15,12 @@ import (
 var _ = Describe("Guardian integration with Ducati", func() {
 	Describe("container creation", func() {
 		It("should create interfaces", func() {
-			gardenAddress := "10.244.16.2:7777"
+			gardenServer := os.Getenv("GARDEN_SERVER")
+			if gardenServer == "" {
+				gardenServer = "10.244.16.2"
+			}
+			gardenAddress := fmt.Sprintf("%s:7777", gardenServer)
+
 			gardenClient := client.New(connection.New("tcp", gardenAddress))
 
 			container, err := gardenClient.Create(garden.ContainerSpec{
