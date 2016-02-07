@@ -8,30 +8,6 @@ docker run --privileged \
    --rm \
    -v $PWD:/ducati-release \
    -e GOPATH=/ducati-release \
-   -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati-cni-plugins \
+   -w / \
    c2cnetworking/ducati-dev \
-   ginkgo -r -randomizeAllSpecs -randomizeSuites $@
-
-docker run --privileged \
-   --rm \
-   -v $PWD:/ducati-release \
-   -e GOPATH=/ducati-release \
-   -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati-daemon \
-   c2cnetworking/ducati-dev \
-   ginkgo -r -randomizeAllSpecs -randomizeSuites $@
-
-docker run --privileged \
-   --rm \
-   -v $PWD:/ducati-release \
-   -e GOPATH=/ducati-release \
-   -w /ducati-release/src/integration \
-   c2cnetworking/ducati-dev \
-   ginkgo -r -randomizeAllSpecs -randomizeSuites $@
-
-docker run --privileged \
-   --rm \
-   -v $PWD:/ducati-release \
-   -e GOPATH=/ducati-release \
-   -w /ducati-release/src/github.com/cloudfoundry-incubator/ducati \
-   c2cnetworking/ducati-dev \
-   ginkgo -r -randomizeAllSpecs -randomizeSuites $@
+   /ducati-release/ci/ducati-tests.sh

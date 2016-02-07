@@ -5,15 +5,16 @@ set -e -u -x
 cd ducati-release
 export GOPATH=$PWD
 
-pushd src/github.com/cloudfoundry-incubator/guardian-cni-adapter
-  ginkgo -r -failFast -randomizeAllSpecs
-popd
+declare -a packages=(
+  "src/github.com/cloudfoundry-incubator/guardian-cni-adapter"
+  "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"
+  "src/integration"
+  "src/github.com/cloudfoundry-incubator/ducati"
+  )
 
-pushd src/github.com/cloudfoundry-incubator/ducati-cni-plugins
-  ginkgo -r -failFast -randomizeAllSpecs
-popd
-
-pushd src/github.com/cloudfoundry-incubator/ducati
-  ginkgo -r -failFast -randomizeAllSpecs
-popd
-
+for dir in "${packages[@]}"
+do
+  pushd $dir
+    ginkgo -r -failFast -randomizeAllSpecs -randomizeSuites "$@"
+  popd
+done
