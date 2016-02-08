@@ -21,7 +21,7 @@ case $1 in
     echo $$ > $PIDFILE
 
     exec /var/vcap/packages/ducati/bin/ducatid \
-	  -listenAddr=<%= p("ducatid.listen_address") %> \
+	  -listenAddr=<%= p("ducati.daemon.listen_address") %> \
       1>>$LOG_DIR/ducatid.stdout.log \
       2>>$LOG_DIR/ducatid.stderr.log
 

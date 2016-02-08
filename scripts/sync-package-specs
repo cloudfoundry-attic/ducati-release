@@ -42,7 +42,8 @@ sync_package ducati \
   -app  github.com/appc/cni/plugins/main/bridge \
   -app  github.com/appc/cni/plugins/ipam/host-local \
   -app  github.com/cloudfoundry-incubator/ducati-daemon/cmd/... \
-  -test acceptance &
+  -test acceptance \
+  -app  github.com/onsi/ginkgo/ginkgo &
 
 wait
 

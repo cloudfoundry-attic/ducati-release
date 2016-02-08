@@ -10,7 +10,7 @@ packages:
   - utils
 
 properties:
-  ducatid.listen_address:
-    description: "Ducati listening address"
+  ducati.daemon.listen_address:
+    description: "Host and port where the ducati daemon will serve its API"
     default: 0.0.0.0:4001
 

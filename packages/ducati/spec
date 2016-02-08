@@ -43,6 +43,13 @@ files:
   - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/onsi/ginkgo/*.go # gosub
   - github.com/onsi/ginkgo/config/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/convert/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/interrupthandler/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/nodot/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/testrunner/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/testsuite/*.go # gosub
+  - github.com/onsi/ginkgo/ginkgo/watch/*.go # gosub
   - github.com/onsi/ginkgo/internal/codelocation/*.go # gosub
   - github.com/onsi/ginkgo/internal/containernode/*.go # gosub
   - github.com/onsi/ginkgo/internal/failer/*.go # gosub

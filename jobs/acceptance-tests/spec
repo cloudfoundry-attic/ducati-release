@@ -1,0 +1,13 @@
+---
+name: acceptance-tests
+
+templates:
+  test.sh.erb: bin/run
+
+packages:
+  - golang
+  - ducati
+
+properties:
+  ducati.acceptance_tests.garden_server:
+    description: 'Host name or IP of garden server to target'
