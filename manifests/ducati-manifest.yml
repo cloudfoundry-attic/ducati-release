@@ -40,7 +40,11 @@ jobs:
         listen_network: tcp
         listen_address: 0.0.0.0:7777
         network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
-        network_plugin_extra_args: "--cniPluginDir=/var/vcap/packages/ducati/bin,--cniConfigDir=/var/vcap/jobs/ducati/cni-conf,--ducatiSandboxDir=/var/vcap/data/ducati-sandbox,--daemonBaseURL=http://localhost:4001"
+        network_plugin_extra_args:
+          - "--cniPluginDir=/var/vcap/packages/ducati/bin"
+          - "--cniConfigDir=/var/vcap/jobs/ducati/cni-conf"
+          - "--ducatiSandboxDir=/var/vcap/data/ducati-sandbox"
+          - "--daemonBaseURL=http://localhost:4001"
 
 networks:
   - name: garden
