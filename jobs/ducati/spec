@@ -7,9 +7,7 @@ templates:
 
 packages:
   - ducati
-  - cni-plugins
   - utils
-  - ducati-daemon
 
 properties:
   ducatid.listen_address:

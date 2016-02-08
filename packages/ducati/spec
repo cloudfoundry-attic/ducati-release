@@ -5,11 +5,76 @@ dependencies:
   - golang
 
 files:
+  - acceptance/*.go # gosub
   - github.com/appc/cni/libcni/*.go # gosub
   - github.com/appc/cni/pkg/invoke/*.go # gosub
+  - github.com/appc/cni/pkg/ip/*.go # gosub
+  - github.com/appc/cni/pkg/ipam/*.go # gosub
   - github.com/appc/cni/pkg/ns/*.go # gosub
+  - github.com/appc/cni/pkg/skel/*.go # gosub
   - github.com/appc/cni/pkg/types/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/backend/*.go # gosub
+  - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
+  - github.com/appc/cni/plugins/main/bridge/*.go # gosub
+  - github.com/bmizerany/pat/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/executor/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ip/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/links/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ns/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/handlers/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/controller/*.go # gosub
+  - github.com/cloudfoundry-incubator/garden/*.go # gosub
+  - github.com/cloudfoundry-incubator/garden/client/*.go # gosub
+  - github.com/cloudfoundry-incubator/garden/client/connection/*.go # gosub
+  - github.com/cloudfoundry-incubator/garden/routes/*.go # gosub
+  - github.com/cloudfoundry-incubator/garden/transport/*.go # gosub
+  - github.com/cloudfoundry-incubator/guardian-cni-adapter/*.go # gosub
+  - github.com/cloudfoundry-incubator/guardian-cni-adapter/controller/*.go # gosub
+  - github.com/coreos/go-iptables/iptables/*.go # gosub
+  - github.com/onsi/ginkgo/*.go # gosub
+  - github.com/onsi/ginkgo/config/*.go # gosub
+  - github.com/onsi/ginkgo/internal/codelocation/*.go # gosub
+  - github.com/onsi/ginkgo/internal/containernode/*.go # gosub
+  - github.com/onsi/ginkgo/internal/failer/*.go # gosub
+  - github.com/onsi/ginkgo/internal/leafnodes/*.go # gosub
+  - github.com/onsi/ginkgo/internal/remote/*.go # gosub
+  - github.com/onsi/ginkgo/internal/spec/*.go # gosub
+  - github.com/onsi/ginkgo/internal/specrunner/*.go # gosub
+  - github.com/onsi/ginkgo/internal/suite/*.go # gosub
+  - github.com/onsi/ginkgo/internal/testingtproxy/*.go # gosub
+  - github.com/onsi/ginkgo/internal/writer/*.go # gosub
+  - github.com/onsi/ginkgo/reporters/*.go # gosub
+  - github.com/onsi/ginkgo/reporters/stenographer/*.go # gosub
+  - github.com/onsi/ginkgo/types/*.go # gosub
+  - github.com/onsi/gomega/*.go # gosub
+  - github.com/onsi/gomega/format/*.go # gosub
+  - github.com/onsi/gomega/internal/assertion/*.go # gosub
+  - github.com/onsi/gomega/internal/asyncassertion/*.go # gosub
+  - github.com/onsi/gomega/internal/oraclematcher/*.go # gosub
+  - github.com/onsi/gomega/internal/testingtsupport/*.go # gosub
+  - github.com/onsi/gomega/matchers/*.go # gosub
+  - github.com/onsi/gomega/matchers/support/goraph/bipartitegraph/*.go # gosub
+  - github.com/onsi/gomega/matchers/support/goraph/edge/*.go # gosub
+  - github.com/onsi/gomega/matchers/support/goraph/node/*.go # gosub
+  - github.com/onsi/gomega/matchers/support/goraph/util/*.go # gosub
+  - github.com/onsi/gomega/types/*.go # gosub
+  - github.com/pivotal-golang/lager/*.go # gosub
+  - github.com/tedsuo/ifrit/*.go # gosub
+  - github.com/tedsuo/ifrit/grouper/*.go # gosub
+  - github.com/tedsuo/ifrit/http_server/*.go # gosub
+  - github.com/tedsuo/ifrit/sigmon/*.go # gosub
+  - github.com/tedsuo/rata/*.go # gosub
   - github.com/vishvananda/netlink/*.go # gosub
   - github.com/vishvananda/netlink/nl/*.go # gosub
+  - golang.org/x/sys/unix/*.go # gosub
+  - golang.org/x/sys/unix/*.s # gosub
