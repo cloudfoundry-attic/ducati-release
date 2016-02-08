@@ -10,4 +10,4 @@ docker run --privileged \
    -e GOPATH=/ducati-release \
    -w / \
    c2cnetworking/ducati-dev \
-   /ducati-release/ci/ducati-tests.sh
+   /ducati-release/ci/ducati-tests.sh "$@"
