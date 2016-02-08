@@ -5,6 +5,7 @@ dependencies:
   - golang
 
 files:
+  - github.com/appc/cni/scripts/*
   - acceptance/*.go # gosub
   - github.com/appc/cni/libcni/*.go # gosub
   - github.com/appc/cni/pkg/invoke/*.go # gosub
