@@ -22,6 +22,7 @@ case $1 in
 
     exec /var/vcap/packages/ducati/bin/ducatid \
 	  -listenAddr=<%= p("ducati.daemon.listen_address") %> \
+	  -localSubnet=<%= p("ducati.daemon.local_subnet") %> \
       1>>$LOG_DIR/ducatid.stdout.log \
       2>>$LOG_DIR/ducatid.stderr.log
 

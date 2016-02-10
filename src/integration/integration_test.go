@@ -20,6 +20,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	var (
 		session     *gexec.Session
 		address     string
+		subnet      string
 		repoDir     string
 		containerNS namespace.Namespace
 		containerID string
@@ -31,7 +32,8 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		By("booting the daemon")
 		address = fmt.Sprintf("127.0.0.1:%d", 4001+GinkgoParallelNode())
 		serverURL = "http://" + address
-		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address)
+		subnet = "192.168.1.1/24"
+		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address, "-localSubnet", subnet)
 		var err error
 		session, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
@@ -48,11 +50,8 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		netConfig = Config{
-			Type:    "vxlan",
-			Network: "192.168.1.0/24",
-			IPAM: IPAM{
-				Type: "fake_plugins",
-			},
+			Type:      "vxlan",
+			NetworkID: "network-id",
 		}
 	})
 
@@ -114,7 +113,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 
 		Expect(output[0].ID).To(Equal(containerID))
-		Expect(output[0].IP).To(Equal("192.168.1.3"))
+		Expect(output[0].IP).To(Equal("192.168.1.2"))
 		Expect(output[0].MAC).To(MatchRegexp("[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}:[[:xdigit:]]{2}"))
 		Expect(hostIP).NotTo(BeNil())
 

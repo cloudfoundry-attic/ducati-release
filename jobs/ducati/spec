@@ -14,3 +14,7 @@ properties:
     description: "Host and port where the ducati daemon will serve its API"
     default: 0.0.0.0:4001
 
+  ducati.daemon.local_subnet:
+    description: "Subnet daemon uses for overlay network addresses"
+    default: 192.168.1.0/24
+

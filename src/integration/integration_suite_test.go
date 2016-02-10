@@ -22,11 +22,9 @@ import (
 var pathToVxlan, pathToDaemon, cniPath string
 
 type Config struct {
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Network     string `json:"network"`
-	HostNetwork string `json:"host_network"`
-	IPAM        IPAM   `json:"ipam,omitempty"`
+	Name      string `json:"name"`
+	Type      string `json:"type"`
+	NetworkID string `json:"network_id"`
 }
 
 type IPAM struct {
