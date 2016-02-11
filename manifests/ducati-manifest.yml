@@ -10,6 +10,18 @@ releases:
   - name: ducati
     version: latest
 
+networks:
+  - name: garden
+    subnets:
+      - range: 10.244.16.0/24
+        reserved: [10.244.16.1]
+        static: &garden_addresses
+          - &test_address_1 10.244.16.2
+          - &test_address_2 10.244.16.3
+
+        cloud_properties:
+          name: random
+
 jobs:
   - name: acceptance-tests
     lifecycle: errand
@@ -23,10 +35,11 @@ jobs:
     properties:
       ducati:
         acceptance_tests:
-          garden_server: 10.244.16.2
+          garden_server_1: *test_address_1
+          garden_server_2: *test_address_2
 
   - name: garden
-    instances: 1
+    instances: 2
     templates:
       - name: garden
         release: guardian
@@ -35,6 +48,7 @@ jobs:
     resource_pool: garden
     networks:
       - name: garden
+        static_ips: *garden_addresses
     properties:
       garden:
         listen_network: tcp
@@ -45,15 +59,6 @@ jobs:
           - "--cniConfigDir=/var/vcap/jobs/ducati/cni-conf"
           - "--ducatiSandboxDir=/var/vcap/data/ducati-sandbox"
           - "--daemonBaseURL=http://localhost:4001"
-
-networks:
-  - name: garden
-    subnets:
-      - range: 10.244.16.0/24
-        reserved: [10.244.16.1]
-        static: [10.244.16.6]
-        cloud_properties:
-          name: random
 
 resource_pools:
   - name: garden

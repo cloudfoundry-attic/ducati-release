@@ -18,7 +18,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 		var container garden.Container
 
 		BeforeEach(func() {
-			gardenServer := os.Getenv("GARDEN_SERVER")
+			gardenServer := os.Getenv("GARDEN_SERVER_1")
 			if gardenServer == "" {
 				gardenServer = "10.244.16.2"
 			}

@@ -7,8 +7,7 @@ cd /var/vcap/packages/ducati
 export GOPATH=$PWD
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-export GARDEN_SERVER="<%= p('ducati.acceptance_tests.garden_server') %>"
+export GARDEN_SERVER_1="<%= p('ducati.acceptance_tests.garden_server_1') %>"
 
-echo "targeting $GARDEN_SERVER"
 cd src/acceptance
 ginkgo -r
