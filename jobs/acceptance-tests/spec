@@ -11,3 +11,5 @@ packages:
 properties:
   ducati.acceptance_tests.garden_server_1:
     description: 'Host name or IP of first garden server to target'
+  ducati.acceptance_tests.garden_server_2:
+    description: 'Host name or IP of second garden server to target'

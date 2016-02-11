@@ -8,6 +8,7 @@ export GOPATH=$PWD
 export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
 export GARDEN_SERVER_1="<%= p('ducati.acceptance_tests.garden_server_1') %>"
+export GARDEN_SERVER_2="<%= p('ducati.acceptance_tests.garden_server_2') %>"
 
 cd src/acceptance
 ginkgo -r

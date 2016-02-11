@@ -3,38 +3,37 @@ package acceptance_test
 import (
 	"bytes"
 	"fmt"
-	"os"
+	"net/http"
 
 	"github.com/cloudfoundry-incubator/garden"
-	"github.com/cloudfoundry-incubator/garden/client"
 	"github.com/cloudfoundry-incubator/garden/client/connection"
+
+	ducati_client "github.com/cloudfoundry-incubator/ducati-daemon/client"
+	garden_client "github.com/cloudfoundry-incubator/garden/client"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Guardian integration with Ducati", func() {
 	Describe("container creation", func() {
-		var gardenClient client.Client
+		var gardenClient1 garden_client.Client
 		var container garden.Container
 
 		BeforeEach(func() {
-			gardenServer := os.Getenv("GARDEN_SERVER_1")
-			if gardenServer == "" {
-				gardenServer = "10.244.16.2"
-			}
-			gardenAddress := fmt.Sprintf("%s:7777", gardenServer)
+			gardenAddress := fmt.Sprintf("%s:7777", gardenServer1)
 
-			gardenClient = client.New(connection.New("tcp", gardenAddress))
+			gardenClient1 = garden_client.New(connection.New("tcp", gardenAddress))
 
 			var err error
-			container, err = gardenClient.Create(garden.ContainerSpec{
+			container, err = gardenClient1.Create(garden.ContainerSpec{
 				Network: "test-network",
 			})
 			Expect(err).NotTo(HaveOccurred())
 		})
 
 		AfterEach(func() {
-			err := gardenClient.Destroy(container.Handle())
+			err := gardenClient1.Destroy(container.Handle())
 			Expect(err).NotTo(HaveOccurred())
 		})
 
@@ -84,6 +83,36 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			output := stdout.String()
 
 			Expect(output).To(ContainSubstring("192.168.0.0/16 via 192.168."))
+		})
+
+		Context("when there are two garden servers", func() {
+			var gardenClient2 garden.Client
+			var container2 garden.Container
+
+			var daemonClient1, daemonClient2 *ducati_client.DaemonClient
+
+			BeforeEach(func() {
+				gardenAddress2 := fmt.Sprintf("%s:7777", gardenServer2)
+
+				gardenClient2 = garden_client.New(connection.New("tcp", gardenAddress2))
+
+				daemonClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
+				daemonClient2 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer2), http.DefaultClient)
+
+				var err error
+				container2, err = gardenClient2.Create(garden.ContainerSpec{
+					Network: "test-network",
+				})
+				Expect(err).NotTo(HaveOccurred())
+			})
+			AfterEach(func() {
+				err := gardenClient2.Destroy(container2.Handle())
+				Expect(err).NotTo(HaveOccurred())
+			})
+
+			XIt("should share container metadata across the deployment", func() {
+
+			})
 		})
 	})
 })
