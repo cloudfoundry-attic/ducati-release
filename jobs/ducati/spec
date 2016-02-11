@@ -15,6 +15,9 @@ properties:
     default: 0.0.0.0:4001
 
   ducati.daemon.local_subnet:
-    description: "Subnet daemon uses for overlay network addresses"
+    description: "Subnet used by the local daemon overlay network addresses"
     default: 192.168.${index}.0/24
 
+  ducati.daemon.overlay_network:
+    description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
+    default: 192.168.0.0/16

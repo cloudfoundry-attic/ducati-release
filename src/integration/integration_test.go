@@ -21,6 +21,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		session     *gexec.Session
 		address     string
 		subnet      string
+		overlay     string
 		repoDir     string
 		containerNS namespace.Namespace
 		containerID string
@@ -33,7 +34,8 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		address = fmt.Sprintf("127.0.0.1:%d", 4001+GinkgoParallelNode())
 		serverURL = "http://" + address
 		subnet = "192.168.1.1/24"
-		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address, "-localSubnet", subnet)
+		overlay = "192.168.0.0/16"
+		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address, "-overlayNetwork", overlay, "-localSubnet", subnet)
 		var err error
 		session, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
