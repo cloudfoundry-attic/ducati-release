@@ -21,16 +21,16 @@ files:
   - github.com/bmizerany/pat/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/executor/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ip/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/links/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/namespace/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/nl/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-cni-plugins/lib/ns/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/handlers/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/ipam/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/executor/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/ip/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/links/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/nl/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/ns/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
