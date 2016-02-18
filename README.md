@@ -1,6 +1,6 @@
 # ducati-release
 
-This release co-locates both `etcd` and `guardian`, see below for instructions
+This release should be deployed so that the `ducati` job co-locates with the `garden` job from guardian-release.  See below.
 
 ## Dependencies
 
@@ -35,8 +35,3 @@ popd
 
 bosh -n deploy
 ```
-
-## Caveats
-
-- The architecture of this whole system is shifting
-- Deploy only if you know how
