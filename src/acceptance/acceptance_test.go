@@ -9,6 +9,7 @@ import (
 	"github.com/cloudfoundry-incubator/garden/client/connection"
 
 	ducati_client "github.com/cloudfoundry-incubator/ducati-daemon/client"
+	"github.com/cloudfoundry-incubator/ducati-daemon/models"
 	garden_client "github.com/cloudfoundry-incubator/garden/client"
 
 	. "github.com/onsi/ginkgo"
@@ -35,6 +36,12 @@ var _ = Describe("Guardian integration with Ducati", func() {
 		AfterEach(func() {
 			err := gardenClient1.Destroy(container.Handle())
 			Expect(err).NotTo(HaveOccurred())
+
+			daemonClient1 := ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
+			Eventually(func() ([]models.Container, error) {
+				containers, err := daemonClient1.ListContainers()
+				return containers, err
+			}).Should(BeEmpty())
 		})
 
 		It("should create interfaces", func() {

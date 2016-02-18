@@ -59,6 +59,7 @@ jobs:
           - "--cniConfigDir=/var/vcap/jobs/ducati/cni-conf"
           - "--ducatiSandboxDir=/var/vcap/data/ducati-sandbox"
           - "--daemonBaseURL=http://localhost:4001"
+          - "--nsBindMountRoot=/var/vcap/data/ducati/bind-mounts"
 
 resource_pools:
   - name: garden
