@@ -96,15 +96,15 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			var gardenClient2 garden.Client
 			var container2 garden.Container
 
-			var daemonClient1, daemonClient2 *ducati_client.DaemonClient
+			var ducatiClient1, ducatiClient2 *ducati_client.DaemonClient
 
 			BeforeEach(func() {
 				gardenAddress2 := fmt.Sprintf("%s:7777", gardenServer2)
 
 				gardenClient2 = garden_client.New(connection.New("tcp", gardenAddress2))
 
-				daemonClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
-				daemonClient2 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer2), http.DefaultClient)
+				ducatiClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
+				ducatiClient2 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer2), http.DefaultClient)
 
 				var err error
 				container2, err = gardenClient2.Create(garden.ContainerSpec{
@@ -117,8 +117,15 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				Expect(err).NotTo(HaveOccurred())
 			})
 
+			// unpend this test once we return to https://www.pivotaltracker.com/story/show/113565681
 			XIt("should share container metadata across the deployment", func() {
+				containersList1, err := ducatiClient1.ListContainers()
+				Expect(err).NotTo(HaveOccurred())
 
+				containersList2, err := ducatiClient2.ListContainers()
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(containersList1).To(ConsistOf(containersList2))
 			})
 		})
 	})
