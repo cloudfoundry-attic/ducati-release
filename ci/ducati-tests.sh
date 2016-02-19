@@ -15,6 +15,6 @@ declare -a packages=(
 
 for dir in "${packages[@]}"; do
   pushd $dir
-    ginkgo -r -failFast -randomizeAllSpecs -randomizeSuites "$@"
+    ginkgo -r  -randomizeAllSpecs -randomizeSuites "$@"
   popd
 done
