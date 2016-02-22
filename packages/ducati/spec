@@ -19,7 +19,6 @@ files:
   - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
   - github.com/appc/cni/plugins/main/bridge/*.go # gosub
   - github.com/bmizerany/pat/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub
@@ -36,7 +35,6 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati/controller/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/connection/*.go # gosub

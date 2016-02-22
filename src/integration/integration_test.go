@@ -126,7 +126,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
 
-		By("checking that the daemon now has non containers saved")
+		By("checking that the daemon now has no containers saved")
 		resp, err = http.Get(url)
 		Expect(err).NotTo(HaveOccurred())
 		defer resp.Body.Close()

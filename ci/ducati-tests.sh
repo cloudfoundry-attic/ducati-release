@@ -10,7 +10,6 @@ declare -a packages=(
   "src/github.com/cloudfoundry-incubator/guardian-cni-adapter"
   "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"
   "src/integration"
-  "src/github.com/cloudfoundry-incubator/ducati"
   )
 
 for dir in "${packages[@]}"; do
