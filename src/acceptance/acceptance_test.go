@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/cloudfoundry-incubator/garden"
 	"github.com/cloudfoundry-incubator/garden/client/connection"
@@ -42,6 +43,8 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				containers, err := daemonClient1.ListContainers()
 				return containers, err
 			}).Should(BeEmpty())
+
+			time.Sleep(3 * time.Second)
 		})
 
 		It("should create interfaces", func() {
