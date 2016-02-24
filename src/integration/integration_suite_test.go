@@ -18,12 +18,11 @@ import (
 
 	"testing"
 
-	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/acceptance"
+	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/testsupport"
 )
 
 var pathToVxlan, pathToDaemon, cniPath string
 
-var postgresProcess *testsupport.PostgresProcess
 var dbConnInfo *testsupport.DBConnectionInfo
 
 type Config struct {

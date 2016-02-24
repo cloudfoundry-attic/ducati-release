@@ -15,7 +15,7 @@ import (
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
 
-	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/acceptance"
+	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/testsupport"
 )
 
 var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
