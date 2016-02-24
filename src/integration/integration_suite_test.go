@@ -55,14 +55,13 @@ var _ = SynchronizedBeforeSuite(
 			Skip("Cannot run suite for non linux platform: " + runtime.GOOS)
 		}
 
-		// race detector doesn't work with cgo in go 1.5
-		vxlan, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan")
+		vxlan, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan", "-race")
 		Expect(err).NotTo(HaveOccurred())
 
-		fakeIpam, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-cni-plugins/fake_plugins")
+		fakeIpam, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-cni-plugins/fake_plugins", "-race")
 		Expect(err).NotTo(HaveOccurred())
 
-		pathToDaemon, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/")
+		pathToDaemon, err := gexec.Build("github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/", "-race")
 		Expect(err).NotTo(HaveOccurred())
 
 		result, err := json.Marshal(paths{

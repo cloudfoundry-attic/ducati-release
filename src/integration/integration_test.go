@@ -18,6 +18,8 @@ import (
 	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/testsupport"
 )
 
+const DEFAULT_TIMEOUT = "5s"
+
 var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	var (
 		daemonSession *gexec.Session
@@ -74,7 +76,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(os.RemoveAll(repoDir)).To(Succeed())
 
 		daemonSession.Interrupt()
-		Eventually(daemonSession).Should(gexec.Exit(0))
+		Eventually(daemonSession, DEFAULT_TIMEOUT).Should(gexec.Exit(0))
 		dbConnInfo.RemoveDatabase(testDatabase)
 	})
 
@@ -85,7 +87,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 
 	It("should maintain the container state in the daemon", func() {
 		url := fmt.Sprintf("http://%s/containers", address)
-		Eventually(serverIsAvailable).Should(Succeed())
+		Eventually(serverIsAvailable, DEFAULT_TIMEOUT).Should(Succeed())
 
 		By("checking that the daemon knows of no containers")
 		resp, err := http.Get(url)
@@ -103,7 +105,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 		pluginSession, err = gexec.Start(addCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
-		Eventually(pluginSession).Should(gexec.Exit(0))
+		Eventually(pluginSession, DEFAULT_TIMEOUT).Should(gexec.Exit(0))
 
 		By("checking that the daemon now has the container data")
 		resp, err = http.Get(url)
@@ -138,7 +140,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(err).NotTo(HaveOccurred())
 		pluginSession, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
-		Eventually(pluginSession).Should(gexec.Exit(0))
+		Eventually(pluginSession, DEFAULT_TIMEOUT).Should(gexec.Exit(0))
 
 		By("checking that the daemon now has no containers saved")
 		resp, err = http.Get(url)
