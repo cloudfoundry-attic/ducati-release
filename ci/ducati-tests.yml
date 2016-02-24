@@ -12,4 +12,4 @@ run:
   path: ducati-release/ci/ducati-tests.sh
 
 params:
-  - GINKGO_EXTRA_FLAGS="-race"
+  GINKGO_EXTRA_FLAGS: "-race"
