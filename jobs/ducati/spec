@@ -21,3 +21,23 @@ properties:
   ducati.daemon.overlay_network:
     description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
     default: 192.168.0.0/16
+
+  ducati.daemon.database.host:
+    description: "IP or DNS name of the database host"
+
+  ducati.daemon.database.port:
+    description: "Port to connect to on the database host"
+    default: 5432
+
+  ducati.daemon.database.username:
+    description: "Username for logging into the database"
+
+  ducati.daemon.database.password:
+    description: "Password for logging into the database"
+
+  ducati.daemon.database.name:
+    description: "Name of the database to use on the host"
+
+  ducati.daemon.database.ssl_mode:
+    description: "SSL security mode.  See http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING"
+    default: require

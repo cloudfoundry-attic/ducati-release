@@ -17,9 +17,14 @@ import (
 	"github.com/onsi/gomega/gexec"
 
 	"testing"
+
+	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/acceptance"
 )
 
 var pathToVxlan, pathToDaemon, cniPath string
+
+var postgresProcess *testsupport.PostgresProcess
+var dbConnInfo *testsupport.DBConnectionInfo
 
 type Config struct {
 	Name      string `json:"name"`
@@ -46,6 +51,7 @@ func TestIntegration(t *testing.T) {
 
 var _ = SynchronizedBeforeSuite(
 	func() []byte {
+		// only run on node 1
 		if runtime.GOOS != "linux" {
 			Skip("Cannot run suite for non linux platform: " + runtime.GOOS)
 		}
@@ -70,6 +76,7 @@ var _ = SynchronizedBeforeSuite(
 		return result
 	},
 	func(result []byte) {
+		// run on all nodes
 		var paths paths
 		err := json.Unmarshal(result, &paths)
 		Expect(err).NotTo(HaveOccurred())
@@ -80,12 +87,16 @@ var _ = SynchronizedBeforeSuite(
 
 		cniPath = fmt.Sprintf("%s%c%s", vxlanBinDir, os.PathListSeparator, fakeIpamDir)
 		pathToVxlan = paths.VXLAN
+
+		dbConnInfo = testsupport.GetDBConnectionInfo()
 	},
 )
 
 var _ = SynchronizedAfterSuite(func() {
+	// run on all nodes
 	return
 }, func() {
+	// run only on node 1
 	gexec.CleanupBuildArtifacts()
 })
 

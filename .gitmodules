@@ -55,3 +55,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/garden"]
 	path = src/github.com/cloudfoundry-incubator/garden
 	url = https://github.com/cloudfoundry-incubator/garden
+[submodule "src/github.com/lib/pq"]
+	path = src/github.com/lib/pq
+	url = https://github.com/lib/pq
+	branch = master

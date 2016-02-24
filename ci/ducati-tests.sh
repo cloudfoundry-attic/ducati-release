@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -u -x
+set -e -u
 
 cd ducati-release
 export GOPATH=$PWD
@@ -11,6 +11,33 @@ declare -a packages=(
   "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"
   "src/integration"
   )
+
+function bootPostgres {
+	echo -n "booting postgres"
+	(/docker-entrypoint.sh postgres &> /var/log/postgres-boot.log) &
+	trycount=0
+	for i in `seq 1 5`; do
+		set +e
+		psql -h localhost -U postgres -c '\conninfo' &>/dev/null
+		exitcode=$?
+		set -e
+		if [ $exitcode -eq 0 ]; then
+			echo "connection established to postgres"
+			return 0
+		fi
+		echo -n "."
+		sleep 1
+	done
+	echo "unable to connect to postgres"
+	exit 1
+}
+
+function stopPostgres {
+	echo "stopping postgres"
+	pgrep postgres | sort | head -n1 | xargs kill -s SIGINT
+}
+
+bootPostgres
 
 for dir in "${packages[@]}"; do
   pushd $dir

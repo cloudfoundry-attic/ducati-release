@@ -18,6 +18,7 @@ networks:
         static: &garden_addresses
           - &test_address_1 10.244.16.2
           - &test_address_2 10.244.16.3
+          - &db_address 10.244.16.9
 
         cloud_properties:
           name: random
@@ -48,8 +49,16 @@ jobs:
     resource_pool: garden
     networks:
       - name: garden
-        static_ips: *garden_addresses
+        static_ips: [ *test_address_1, *test_address_2 ]
     properties:
+      ducati:
+        daemon:
+          database:
+            host: *db_address
+            username: postgres
+            password: ""
+            name: ducati
+            ssl_mode: disable
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777

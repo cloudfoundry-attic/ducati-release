@@ -14,30 +14,42 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
+
+	testsupport "github.com/cloudfoundry-incubator/ducati-daemon/acceptance"
 )
 
 var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	var (
-		session     *gexec.Session
-		address     string
-		subnet      string
-		overlay     string
-		repoDir     string
-		containerNS namespace.Namespace
-		containerID string
-		netConfig   Config
-		serverURL   string
+		daemonSession *gexec.Session
+		pluginSession *gexec.Session
+		address       string
+		subnet        string
+		overlay       string
+		repoDir       string
+		containerNS   namespace.Namespace
+		containerID   string
+		netConfig     Config
+		serverURL     string
+		testDatabase  *testsupport.TestDatabase
 	)
 
 	BeforeEach(func() {
+		dbName := fmt.Sprintf("test_db_%x", rand.Int31())
+		testDatabase = dbConnInfo.CreateDatabase(dbName)
+
 		By("booting the daemon")
 		address = fmt.Sprintf("127.0.0.1:%d", 4001+GinkgoParallelNode())
 		serverURL = "http://" + address
 		subnet = "192.168.1.1/24"
 		overlay = "192.168.0.0/16"
-		daemonCmd := exec.Command(pathToDaemon, "-listenAddr", address, "-overlayNetwork", overlay, "-localSubnet", subnet)
+		daemonCmd := exec.Command(pathToDaemon,
+			"-listenAddr", address,
+			"-overlayNetwork", overlay,
+			"-localSubnet", subnet,
+			"-databaseURL", testDatabase.URL(),
+		)
 		var err error
-		session, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
+		daemonSession, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
 
 		By("creating a container")
@@ -61,7 +73,9 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(containerNS.Destroy()).To(Succeed())
 		Expect(os.RemoveAll(repoDir)).To(Succeed())
 
-		Eventually(session.Terminate()).Should(gexec.Exit(0))
+		daemonSession.Interrupt()
+		Eventually(daemonSession).Should(gexec.Exit(0))
+		dbConnInfo.RemoveDatabase(testDatabase)
 	})
 
 	var serverIsAvailable = func() error {
@@ -87,9 +101,9 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		By("invoking the vxlan CNI plugin with the ADD action")
 		addCmd, err := buildCNICmd("ADD", netConfig, containerNS, containerID, repoDir, serverURL)
 		Expect(err).NotTo(HaveOccurred())
-		session, err = gexec.Start(addCmd, GinkgoWriter, GinkgoWriter)
+		pluginSession, err = gexec.Start(addCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
-		Eventually(session).Should(gexec.Exit(0))
+		Eventually(pluginSession).Should(gexec.Exit(0))
 
 		By("checking that the daemon now has the container data")
 		resp, err = http.Get(url)
@@ -122,9 +136,9 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		By("invoking the vxlan CNI plugin with the DELETE action")
 		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
 		Expect(err).NotTo(HaveOccurred())
-		session, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
+		pluginSession, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
-		Eventually(session).Should(gexec.Exit(0))
+		Eventually(pluginSession).Should(gexec.Exit(0))
 
 		By("checking that the daemon now has no containers saved")
 		resp, err = http.Get(url)
