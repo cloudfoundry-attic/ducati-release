@@ -39,6 +39,25 @@ jobs:
           garden_server_1: *test_address_1
           garden_server_2: *test_address_2
 
+  - name: ducati-db
+    instances: 1
+    persistent_disk: 256
+    templates:
+      - name: postgres
+        release: ducati
+    resource_pool: garden
+    networks:
+      - name: garden
+        static_ips: [ *db_address ]
+    properties:
+      databases:
+        db_scheme: postgres
+        port: 5432
+        databases:
+        - {name: ducati, tag: whatever}
+        roles:
+        - {name: ducati_daemon, password: some-password, tag: admin}
+
   - name: garden
     instances: 2
     templates:
@@ -55,8 +74,9 @@ jobs:
         daemon:
           database:
             host: *db_address
-            username: postgres
-            password: ""
+            port: 5432
+            username: ducati_daemon
+            password: some-password
             name: ducati
             ssl_mode: disable
       garden:
