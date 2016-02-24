@@ -121,7 +121,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			})
 
 			// unpend this test once we return to https://www.pivotaltracker.com/story/show/113565681
-			XIt("should share container metadata across the deployment", func() {
+			It("should share container metadata across the deployment", func() {
 				containersList1, err := ducatiClient1.ListContainers()
 				Expect(err).NotTo(HaveOccurred())
 
