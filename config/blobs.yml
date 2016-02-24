@@ -3,3 +3,7 @@ golang/go1.6.linux-amd64.tar.gz:
   object_id: 0bf694fc-20de-4130-b913-9d527ef6d875
   sha: 01a6a28dbe31a53103b600979bbbbd63a8104456
   size: 84799480
+postgres/postgresql-9.4.5.tar.gz:
+  object_id: 4cace641-03d8-441e-9011-b309e8afb1f4
+  sha: 5278d04093f3cb2e00796fae15b2e33406844d01
+  size: 23211720
