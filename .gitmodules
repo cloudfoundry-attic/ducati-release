@@ -63,3 +63,6 @@
 	path = src/github.com/jmoiron/sqlx
 	url = https://github.com/jmoiron/sqlx
 	branch = master
+[submodule "src/github.com/nu7hatch/gouuid"]
+	path = src/github.com/nu7hatch/gouuid
+	url = https://github.com/nu7hatch/gouuid

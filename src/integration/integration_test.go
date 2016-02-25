@@ -44,13 +44,17 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		serverURL = "http://" + address
 		subnet = "192.168.1.1/24"
 		overlay = "192.168.0.0/16"
+		sandboxRepoDir, err := ioutil.TempDir("", "sandbox")
+		Expect(err).NotTo(HaveOccurred())
+
 		daemonCmd := exec.Command(pathToDaemon,
 			"-listenAddr", address,
 			"-overlayNetwork", overlay,
 			"-localSubnet", subnet,
 			"-databaseURL", testDatabase.URL(),
+			"-sandboxRepoDir", sandboxRepoDir,
 		)
-		var err error
+
 		daemonSession, err = gexec.Start(daemonCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
 
