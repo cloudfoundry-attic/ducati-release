@@ -22,6 +22,10 @@ properties:
     description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
     default: 192.168.0.0/16
 
+  ducati.daemon.sandbox_dir:
+    description: "Directory to hold sandbox network namespaces"
+    default: /var/vcap/data/ducati-sandbox
+
   ducati.daemon.database.host:
     description: "IP or DNS name of the database host"
 

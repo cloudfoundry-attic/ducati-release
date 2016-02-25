@@ -33,6 +33,7 @@ case $1 in
       -listenAddr=<%= p("ducati.daemon.listen_address") %> \
       -overlayNetwork=<%= p("ducati.daemon.overlay_network") %> \
       -localSubnet=<%= p("ducati.daemon.local_subnet").sub('${index}', "#{spec.index}") %> \
+      -sandboxRepoDir=<%= p("ducati.daemon.sandbox_dir") %> \
       -databaseURL="$databaseURL" \
       1>>$LOG_DIR/ducatid.stdout.log \
       2>>$LOG_DIR/ducatid.stderr.log
