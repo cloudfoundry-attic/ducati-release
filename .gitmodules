@@ -8,6 +8,7 @@
 [submodule "src/github.com/appc/cni"]
 	path = src/github.com/appc/cni
 	url = https://github.com/appc/cni
+	branch = master
 [submodule "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"]
 	path = src/github.com/cloudfoundry-incubator/ducati-cni-plugins
 	url = https://github.com/cloudfoundry-incubator/ducati-cni-plugins
@@ -55,6 +56,7 @@
 [submodule "src/github.com/cloudfoundry-incubator/garden"]
 	path = src/github.com/cloudfoundry-incubator/garden
 	url = https://github.com/cloudfoundry-incubator/garden
+	branch = master
 [submodule "src/github.com/lib/pq"]
 	path = src/github.com/lib/pq
 	url = https://github.com/lib/pq
@@ -66,3 +68,4 @@
 [submodule "src/github.com/nu7hatch/gouuid"]
 	path = src/github.com/nu7hatch/gouuid
 	url = https://github.com/nu7hatch/gouuid
+	branch = master
