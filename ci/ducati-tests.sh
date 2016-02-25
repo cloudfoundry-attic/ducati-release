@@ -42,6 +42,6 @@ bootPostgres
 for dir in "${packages[@]}"; do
   pushd $dir
     extraFlags="${GINKGO_EXTRA_FLAGS:-""}"
-    ginkgo -r  -randomizeAllSpecs -randomizeSuites $extraFlags "$@"
+    ginkgo -r -p -randomizeAllSpecs -randomizeSuites $extraFlags "$@"
   popd
 done
