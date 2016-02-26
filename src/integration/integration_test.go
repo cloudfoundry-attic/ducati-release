@@ -22,17 +22,18 @@ const DEFAULT_TIMEOUT = "5s"
 
 var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 	var (
-		daemonSession *gexec.Session
-		pluginSession *gexec.Session
-		address       string
-		subnet        string
-		overlay       string
-		repoDir       string
-		containerNS   namespace.Namespace
-		containerID   string
-		netConfig     Config
-		serverURL     string
-		testDatabase  *testsupport.TestDatabase
+		daemonSession  *gexec.Session
+		pluginSession  *gexec.Session
+		address        string
+		subnet         string
+		overlay        string
+		repoDir        string
+		containerNS    namespace.Namespace
+		containerID    string
+		netConfig      Config
+		serverURL      string
+		testDatabase   *testsupport.TestDatabase
+		sandboxRepoDir string
 	)
 
 	BeforeEach(func() {
@@ -44,7 +45,9 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		serverURL = "http://" + address
 		subnet = "192.168.1.1/24"
 		overlay = "192.168.0.0/16"
-		sandboxRepoDir, err := ioutil.TempDir("", "sandbox")
+
+		var err error
+		sandboxRepoDir, err = ioutil.TempDir("", "sandbox")
 		Expect(err).NotTo(HaveOccurred())
 
 		daemonCmd := exec.Command(pathToDaemon,
@@ -140,7 +143,7 @@ var _ = Describe("how the VXLAN plugin talks to the ducati daemon", func() {
 		Expect(hostIP).NotTo(BeNil())
 
 		By("invoking the vxlan CNI plugin with the DELETE action")
-		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, repoDir, serverURL)
+		delCmd, err := buildCNICmd("DEL", netConfig, containerNS, containerID, sandboxRepoDir, serverURL)
 		Expect(err).NotTo(HaveOccurred())
 		pluginSession, err = gexec.Start(delCmd, GinkgoWriter, GinkgoWriter)
 		Expect(err).NotTo(HaveOccurred())
