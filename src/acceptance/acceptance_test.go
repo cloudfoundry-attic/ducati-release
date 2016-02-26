@@ -42,7 +42,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Eventually(func() ([]models.Container, error) {
 				containers, err := daemonClient1.ListContainers()
 				return containers, err
-			}).Should(BeEmpty())
+			}, "5s").Should(BeEmpty())
 
 			time.Sleep(3 * time.Second)
 		})
@@ -120,7 +120,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				Expect(err).NotTo(HaveOccurred())
 			})
 
-			// unpend this test once we return to https://www.pivotaltracker.com/story/show/113565681
 			It("should share container metadata across the deployment", func() {
 				containersList1, err := ducatiClient1.ListContainers()
 				Expect(err).NotTo(HaveOccurred())
