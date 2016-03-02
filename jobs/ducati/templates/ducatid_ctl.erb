@@ -29,8 +29,10 @@ case $1 in
     dbSSLMode="<%= p("ducati.daemon.database.ssl_mode") %>"
     databaseURL="postgres://$dbUser:$dbPass@$dbHost:$dbPort/$dbName?sslmode=$dbSSLMode"
 
+    listenAddr="<%= p("ducati.daemon.listen_host") %>:<%= p("ducati.daemon.listen_port") %>"
+
     exec /var/vcap/packages/ducati/bin/ducatid \
-      -listenAddr=<%= p("ducati.daemon.listen_address") %> \
+      -listenAddr="$listenAddr" \
       -overlayNetwork=<%= p("ducati.daemon.overlay_network") %> \
       -localSubnet=<%= p("ducati.daemon.local_subnet").sub('${index}', "#{spec.index}") %> \
       -sandboxRepoDir=<%= p("ducati.daemon.sandbox_dir") %> \

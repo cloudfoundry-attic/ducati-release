@@ -87,7 +87,6 @@ jobs:
           - "--cniPluginDir=/var/vcap/packages/ducati/bin"
           - "--cniConfigDir=/var/vcap/jobs/ducati/cni-conf"
           - "--ducatiSandboxDir=/var/vcap/data/ducati-sandbox"
-          - "--daemonBaseURL=http://localhost:4001"
           - "--nsBindMountRoot=/var/vcap/data/ducati/bind-mounts"
           - "--logDir=/var/vcap/sys/log/ducati/adapter"
 

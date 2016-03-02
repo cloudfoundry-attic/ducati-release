@@ -10,9 +10,13 @@ packages:
   - utils
 
 properties:
-  ducati.daemon.listen_address:
-    description: "Host and port where the ducati daemon will serve its API"
-    default: 0.0.0.0:4001
+  ducati.daemon.listen_host:
+    description: "Host where the ducati daemon will serve its API"
+    default: 0.0.0.0
+
+  ducati.daemon.listen_port:
+    description: "Port where the ducati daemon will serve its API"
+    default: 4001
 
   ducati.daemon.local_subnet:
     description: "Subnet used by the local daemon overlay network addresses"
