@@ -33,12 +33,12 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/links/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/nl/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/subscriber/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/threading/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/watcher/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-daemon/watcher/subscriber/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/connection/*.go # gosub
