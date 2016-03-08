@@ -2,8 +2,9 @@
 name: ducati
 templates:
   ducatid_ctl.erb: bin/ducatid_ctl
-  10-bridge.conf.erb: cni-conf/10-bridge.conf
-  20-vxlan.conf.erb: cni-conf/20-vxlan.conf
+  adapter.json.erb: config/adapter.json
+  10-bridge.conf.erb: config/cni/10-bridge.conf
+  20-vxlan.conf.erb: config/cni/20-vxlan.conf
 
 packages:
   - ducati
@@ -28,7 +29,7 @@ properties:
 
   ducati.daemon.sandbox_dir:
     description: "Directory to hold sandbox network namespaces"
-    default: /var/vcap/data/ducati-sandbox
+    default: /var/vcap/data/ducati/sandbox
 
   ducati.daemon.database.host:
     description: "IP or DNS name of the database host"
@@ -49,3 +50,19 @@ properties:
   ducati.daemon.database.ssl_mode:
     description: "SSL security mode.  See http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING"
     default: require
+
+  ducati.adapter.cni_plugin_dir:
+    description: "Directory containing CNI plugins"
+    default: /var/vcap/packages/ducati/bin
+
+  ducati.adapter.cni_config_dir:
+    description: "Directory containing CNI configuration files"
+    default: /var/vcap/jobs/ducati/config/cni
+
+  ducati.adapter.bind_mount_dir:
+    description: "The CNI adapter will bind-mount network namespaces in this directory"
+    default: /var/vcap/data/ducati/bind-mounts
+
+  ducati.adapter.log_dir:
+    description: "The CNI adapter will drop logs here"
+    default: /var/vcap/sys/log/ducati/adapter
