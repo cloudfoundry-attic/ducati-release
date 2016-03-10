@@ -36,7 +36,11 @@ function stopPostgres {
 	pgrep postgres | sort | head -n1 | xargs kill -s SIGINT
 }
 
-bootPostgres
+if [ ${NO_POSTGRES:-"false"} = "true" ]; then
+  echo "skipping postgres"
+else
+  bootPostgres
+fi
 
 for dir in "${packages[@]}"; do
   pushd $dir

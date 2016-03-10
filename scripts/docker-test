@@ -9,6 +9,7 @@ docker run --privileged \
    -v $PWD:/ducati-release \
    -e GOPATH=/ducati-release \
    -e GINKGO_EXTRA_FLAGS="${GINKGO_EXTRA_FLAGS:-""}" \
+   -e NO_POSTGRES="${NO_POSTGRES:-""}" \
    -w / \
    c2cnetworking/ducati-dev \
    /ducati-release/ci/ducati-tests.sh "$@"
