@@ -22,11 +22,11 @@ files:
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/cmd/ducatid/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-daemon/commands/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-daemon/conditions/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/container/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/db/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/executor/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/executor/commands/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/executor/conditions/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/handlers/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/ipam/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/ip/*.go # gosub
