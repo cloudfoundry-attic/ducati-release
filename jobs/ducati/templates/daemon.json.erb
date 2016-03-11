@@ -1,0 +1,8 @@
+<%=
+    require 'json'
+
+    daemon = p("ducati.daemon")
+    daemon["index"] = spec.index
+
+    JSON.pretty_generate(daemon)
+%>
