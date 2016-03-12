@@ -20,23 +20,8 @@ case $1 in
 
     echo $$ > $PIDFILE
 
-
-    dbHost="<%= p("ducati.daemon.database.host") %>"
-    dbPort="<%= p("ducati.daemon.database.port") %>"
-    dbUser="<%= p("ducati.daemon.database.username") %>"
-    dbPass="<%= p("ducati.daemon.database.password") %>"
-    dbName="<%= p("ducati.daemon.database.name") %>"
-    dbSSLMode="<%= p("ducati.daemon.database.ssl_mode") %>"
-    databaseURL="postgres://$dbUser:$dbPass@$dbHost:$dbPort/$dbName?sslmode=$dbSSLMode"
-
-    listenAddr="<%= p("ducati.daemon.listen_host") %>:<%= p("ducati.daemon.listen_port") %>"
-
     exec /var/vcap/packages/ducati/bin/ducatid \
-      -listenAddr="$listenAddr" \
-      -overlayNetwork=<%= p("ducati.daemon.overlay_network") %> \
-      -localSubnet=<%= p("ducati.daemon.local_subnet").sub('${index}', "#{spec.index}") %> \
-      -sandboxRepoDir=<%= p("ducati.daemon.sandbox_dir") %> \
-      -databaseURL="$databaseURL" \
+      -configFile=/var/vcap/jobs/ducati/config/daemon.json \
       1>>$LOG_DIR/ducatid.stdout.log \
       2>>$LOG_DIR/ducatid.stderr.log
 
