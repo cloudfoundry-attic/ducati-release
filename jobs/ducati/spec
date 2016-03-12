@@ -12,6 +12,10 @@ packages:
   - utils
 
 properties:
+  ducati.daemon.underlay_network:
+    description: "VXLAN VTEP will be attached to this BOSH network.  Empty means pick the first network"
+    default: ""
+
   ducati.daemon.listen_host:
     description: "Host where the ducati daemon will serve its API"
     default: 0.0.0.0

@@ -1,8 +1,16 @@
 <%=
     require 'json'
 
+    underlayNetworkName = p("ducati.daemon.underlay_network")
+    if underlayNetworkName != "" then
+        underlayNetwork = spec.networks[underlayNetworkName]
+    else
+        underlayNetwork = spec.networks.to_h().values[0]
+    end
+
     daemon = p("ducati.daemon")
     daemon["index"] = spec.index
+    daemon["host_address"] = underlayNetwork.ip
 
     JSON.pretty_generate(daemon)
 %>
