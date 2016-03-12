@@ -20,15 +20,17 @@ var _ = Describe("Guardian integration with Ducati", func() {
 	Describe("container creation", func() {
 		var gardenClient1 garden_client.Client
 		var container garden.Container
+		var networkName string
 
 		BeforeEach(func() {
+			networkName = "test-network"
 			gardenAddress := fmt.Sprintf("%s:7777", gardenServer1)
 
 			gardenClient1 = garden_client.New(connection.New("tcp", gardenAddress))
 
 			var err error
 			container, err = gardenClient1.Create(garden.ContainerSpec{
-				Network: "test-network",
+				Network: networkName,
 			})
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -37,9 +39,9 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			err := gardenClient1.Destroy(container.Handle())
 			Expect(err).NotTo(HaveOccurred())
 
-			daemonClient1 := ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
+			ducatiClient1 := ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
 			Eventually(func() ([]models.Container, error) {
-				containers, err := daemonClient1.ListContainers()
+				containers, err := ducatiClient1.ListNetworkContainers(networkName)
 				return containers, err
 			}, "5s").Should(BeEmpty())
 		})
@@ -108,7 +110,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 				var err error
 				container2, err = gardenClient2.Create(garden.ContainerSpec{
-					Network: "test-network",
+					Network: networkName,
 				})
 				Expect(err).NotTo(HaveOccurred())
 			})
@@ -118,10 +120,10 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			})
 
 			It("should share container metadata across the deployment", func() {
-				containersList1, err := ducatiClient1.ListContainers()
+				containersList1, err := ducatiClient1.ListNetworkContainers(networkName)
 				Expect(err).NotTo(HaveOccurred())
 
-				containersList2, err := ducatiClient2.ListContainers()
+				containersList2, err := ducatiClient2.ListNetworkContainers(networkName)
 				Expect(err).NotTo(HaveOccurred())
 
 				Expect(containersList1).To(ConsistOf(containersList2))
