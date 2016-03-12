@@ -40,7 +40,7 @@ bosh run errand acceptance-tests
 ```
 
 ### Running other tests
-```
+```bash
 docker-machine create --driver virtualbox --virtualbox-cpu-count 4 --virtualbox-memory 2048 dev-box
 eval $(docker-machine env dev-box)
 ~/workspace/ducati-release/scripts/docker-test
