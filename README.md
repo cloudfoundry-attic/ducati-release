@@ -16,11 +16,12 @@ pushd ~/workspace
 popd
 ```
 
-### Deploy the releases
+### Deploy and run the acceptance test errand
 ```bash
 bosh target lite
 pushd ~/workspace/guardian-release
   git pull
+  git submodule sync
   git submodule update --init --recursive
   bosh create release
   bosh upload release
@@ -28,10 +29,19 @@ popd
 
 pushd ~/workspace/ducati-release
   git pull
+  git submodule sync
   git submodule update --init --recursive
   bosh create release --force && bosh -n upload release
   bosh deployment manifests/ducati-manifest.yml
 popd
 
 bosh -n deploy
+bosh run errand acceptance-tests
+```
+
+### Running other tests
+```
+docker-machine create --driver virtualbox --virtualbox-cpu-count 4 --virtualbox-memory 2048 dev-box
+eval $(docker-machine env dev-box)
+~/workspace/ducati-release/scripts/docker-test
 ```
