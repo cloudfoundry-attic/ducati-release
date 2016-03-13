@@ -36,6 +36,10 @@ properties:
     description: "Directory to hold sandbox network namespaces"
     default: /var/vcap/data/ducati/sandbox
 
+  ducati.daemon.vni:
+    description: "VXLAN VNI for the overlay"
+    default: 123456
+
   ducati.daemon.database.host:
     description: "IP or DNS name of the database host"
 
