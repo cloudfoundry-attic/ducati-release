@@ -18,6 +18,9 @@ files:
   - github.com/appc/cni/plugins/ipam/host-local/backend/*.go # gosub
   - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
   - github.com/appc/cni/plugins/main/bridge/*.go # gosub
+  - github.com/appc/cni/vendor/github.com/coreos/go-iptables/iptables/*.go # gosub
+  - github.com/appc/cni/vendor/github.com/vishvananda/netlink/*.go # gosub
+  - github.com/appc/cni/vendor/github.com/vishvananda/netlink/nl/*.go # gosub
   - github.com/bmizerany/pat/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/client/*.go # gosub
@@ -49,7 +52,6 @@ files:
   - github.com/cloudfoundry-incubator/garden/transport/*.go # gosub
   - github.com/cloudfoundry-incubator/guardian-cni-adapter/*.go # gosub
   - github.com/cloudfoundry-incubator/guardian-cni-adapter/controller/*.go # gosub
-  - github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/jmoiron/sqlx/*.go # gosub
   - github.com/jmoiron/sqlx/reflectx/*.go # gosub
   - github.com/lib/pq/*.go # gosub
