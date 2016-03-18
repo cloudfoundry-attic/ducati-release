@@ -1,7 +1,9 @@
 {
     "name": "ducati-bridge",
     "type": "bridge",
-    "network": "172.16.1.0/24",
+    "bridge": "cni0",
+    "isGateway": true,
+    "ipMasq": true,
     "ipam": {
         "type": "host-local",
         "subnet": "172.16.1.0/24",

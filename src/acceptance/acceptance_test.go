@@ -89,6 +89,18 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Expect(output).To(ContainSubstring("eth1"))
 		})
 
+		It("should allow access to the internet from inside the container", func() {
+			pingInternet := garden.ProcessSpec{
+				Path: "/bin/ping",
+				Args: []string{"-c3", "8.8.8.8"},
+				User: "root",
+			}
+
+			process, err := gardenContainer.Run(pingInternet, garden.ProcessIO{})
+			Expect(err).NotTo(HaveOccurred())
+			Eventually(process.Wait).Should(Equal(0))
+		})
+
 		Context("when containers share a network", func() {
 			var gardenContainer2 garden.Container
 			var ducatiContainer2 *models.Container
