@@ -26,7 +26,7 @@ properties:
 
   ducati.daemon.local_subnet:
     description: "Subnet used by the local daemon overlay network addresses"
-    default: 192.168.${index}.0/24
+    default: 192.168.${index}.0/16
 
   ducati.daemon.overlay_network:
     description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
@@ -38,7 +38,7 @@ properties:
 
   ducati.daemon.vni:
     description: "VXLAN VNI for the overlay"
-    default: 123456
+    default: 1
 
   ducati.daemon.database.host:
     description: "IP or DNS name of the database host"
