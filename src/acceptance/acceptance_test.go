@@ -96,7 +96,8 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				User: "root",
 			}
 
-			process, err := gardenContainer.Run(pingInternet, garden.ProcessIO{})
+			GinkgoWriter.Write([]byte("ping the internet\n"))
+			process, err := gardenContainer.Run(pingInternet, ginkgoProcIO())
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(process.Wait).Should(Equal(0))
 		})
@@ -260,7 +261,8 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				User: "root",
 			}
 
-			process, err := gardenContainer.Run(pingContainer2, garden.ProcessIO{})
+			GinkgoWriter.Write([]byte("ping container 2\n"))
+			process, err := gardenContainer.Run(pingContainer2, ginkgoProcIO())
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(process.Wait).Should(Equal(0))
 
@@ -271,9 +273,18 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				User: "root",
 			}
 
-			process, err = gardenContainer2.Run(pingContainer1, garden.ProcessIO{})
+			GinkgoWriter.Write([]byte("ping container 1\n"))
+			process, err = gardenContainer2.Run(pingContainer1, ginkgoProcIO())
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(process.Wait).Should(Equal(0))
 		})
 	})
 })
+
+func ginkgoProcIO() garden.ProcessIO {
+	return garden.ProcessIO{
+		Stdin:  &bytes.Buffer{},
+		Stdout: GinkgoWriter,
+		Stderr: GinkgoWriter,
+	}
+}
