@@ -85,6 +85,8 @@ jobs:
         network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
         network_plugin_extra_args:
           - "--configFile=/var/vcap/jobs/ducati/config/adapter.json"
+        shared_mounts:
+          - "/var/vcap/data/ducati/container-netns"
 
 resource_pools:
   - name: garden

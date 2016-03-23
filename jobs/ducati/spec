@@ -70,7 +70,7 @@ properties:
 
   ducati.adapter.bind_mount_dir:
     description: "The CNI adapter will bind-mount network namespaces in this directory"
-    default: /var/vcap/data/ducati/bind-mounts
+    default: /var/vcap/data/ducati/container-netns
 
   ducati.adapter.log_dir:
     description: "The CNI adapter will drop logs here"
