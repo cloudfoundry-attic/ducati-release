@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+set -u
+
+export PGPASSWORD=some-password
+psql -h 10.244.16.9 -U ducati_daemon -w -p 5432 ducati
