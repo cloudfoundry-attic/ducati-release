@@ -23,6 +23,32 @@ networks:
         cloud_properties:
           name: random
 
+properties:
+  ducati:
+    database:
+      db_scheme: postgres
+      port: 5432
+      databases:
+      - {name: ducati, tag: whatever}
+      roles:
+      - {name: ducati_daemon, password: some-password, tag: admin}
+    daemon:
+      database:
+        host: *db_address
+        port: 5432
+        username: ducati_daemon
+        password: some-password
+        name: ducati
+        ssl_mode: disable
+  garden:
+    listen_network: tcp
+    listen_address: 0.0.0.0:7777
+    network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
+    network_plugin_extra_args:
+      - "--configFile=/var/vcap/jobs/ducati/config/adapter.json"
+    shared_mounts:
+      - "/var/vcap/data/ducati/container-netns"
+
 jobs:
   - name: acceptance-tests
     lifecycle: errand
@@ -49,14 +75,6 @@ jobs:
     networks:
       - name: garden
         static_ips: [ *db_address ]
-    properties:
-      databases:
-        db_scheme: postgres
-        port: 5432
-        databases:
-        - {name: ducati, tag: whatever}
-        roles:
-        - {name: ducati_daemon, password: some-password, tag: admin}
 
   - name: garden
     instances: 2
@@ -69,24 +87,6 @@ jobs:
     networks:
       - name: garden
         static_ips: [ *test_address_1, *test_address_2 ]
-    properties:
-      ducati:
-        daemon:
-          database:
-            host: *db_address
-            port: 5432
-            username: ducati_daemon
-            password: some-password
-            name: ducati
-            ssl_mode: disable
-      garden:
-        listen_network: tcp
-        listen_address: 0.0.0.0:7777
-        network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
-        network_plugin_extra_args:
-          - "--configFile=/var/vcap/jobs/ducati/config/adapter.json"
-        shared_mounts:
-          - "/var/vcap/data/ducati/container-netns"
 
 resource_pools:
   - name: garden
