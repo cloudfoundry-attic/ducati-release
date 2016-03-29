@@ -18,6 +18,7 @@ files:
   - github.com/appc/cni/plugins/ipam/host-local/backend/*.go # gosub
   - github.com/appc/cni/plugins/ipam/host-local/backend/disk/*.go # gosub
   - github.com/appc/cni/plugins/main/bridge/*.go # gosub
+  - github.com/appc/cni/plugins/meta/flannel/*.go # gosub
   - github.com/appc/cni/vendor/github.com/coreos/go-iptables/iptables/*.go # gosub
   - github.com/appc/cni/vendor/github.com/vishvananda/netlink/*.go # gosub
   - github.com/appc/cni/vendor/github.com/vishvananda/netlink/nl/*.go # gosub

@@ -9,6 +9,8 @@ releases:
     version: latest
   - name: ducati
     version: latest
+  - name: etcd
+    version: latest
 
 networks:
   - name: garden
@@ -43,6 +45,8 @@ jobs:
     instances: 1
     persistent_disk: 256
     templates:
+      - name: etcd
+        release: etcd
       - name: postgres
         release: ducati
     resource_pool: garden
@@ -57,6 +61,11 @@ jobs:
         - {name: ducati, tag: whatever}
         roles:
         - {name: ducati_daemon, password: some-password, tag: admin}
+      etcd:
+        require_ssl: false
+        peer_require_ssl: false
+        machines:
+        - *db_address
 
   - name: garden
     instances: 2
@@ -64,6 +73,8 @@ jobs:
       - name: garden
         release: guardian
       - name: ducati
+        release: ducati
+      - name: flannel
         release: ducati
     resource_pool: garden
     networks:
@@ -79,6 +90,9 @@ jobs:
             password: some-password
             name: ducati
             ssl_mode: disable
+      flannel:
+        etcd_endpoints:
+          - http://10.244.16.9:4001
       garden:
         listen_network: tcp
         listen_address: 0.0.0.0:7777

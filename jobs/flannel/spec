@@ -1,0 +1,14 @@
+---
+name: flannel
+
+templates:
+  flanneld_ctl.erb: bin/flanneld_ctl
+
+packages:
+  - common
+  - flannel
+
+properties:
+  flannel.etcd_endpoints:
+    description: "a list of etcd endpoints"
+    default: []

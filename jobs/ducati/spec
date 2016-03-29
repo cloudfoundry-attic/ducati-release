@@ -6,6 +6,7 @@ templates:
   daemon.json.erb: config/daemon.json
   10-bridge.conf.erb: config/cni/10-bridge.conf
   20-vxlan.conf.erb: config/cni/20-vxlan.conf
+  30-flannel.conf.erb: config/cni/30-flannel.conf
 
 packages:
   - ducati

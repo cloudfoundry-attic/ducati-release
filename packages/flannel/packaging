@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -u
+
+mkdir -p ${BOSH_INSTALL_TARGET}/bin
+
+tar zxvf flannel/flannel-0.5.5-linux-amd64.tar.gz
+
+mv flannel-0.5.5/* ${BOSH_INSTALL_TARGET}/bin
+mv ${BOSH_INSTALL_TARGET}/bin/README.md ${BOSH_INSTALL_TARGET}/
