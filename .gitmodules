@@ -66,3 +66,11 @@
 	path = src/github.com/nu7hatch/gouuid
 	url = https://github.com/nu7hatch/gouuid
 	branch = master
+[submodule "src/github.com/cloudfoundry-incubator/ducati-dns"]
+	path = src/github.com/cloudfoundry-incubator/ducati-dns
+	url = https://github.com/cloudfoundry-incubator/ducati-dns
+	branch = master
+[submodule "src/github.com/miekg/dns"]
+	path = src/github.com/miekg/dns
+	url = https://github.com/miekg/dns
+	branch = master
