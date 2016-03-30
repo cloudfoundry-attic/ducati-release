@@ -1,0 +1,111 @@
+---
+name: ducati-guardian-dev
+
+# replace with bosh status --uuid
+director_uuid: <%= `bosh target lite > /dev/null 2>&1 && bosh status --uuid` %>
+
+releases:
+  - name: guardian-dev
+    version: latest
+  - name: ducati
+    version: latest
+
+networks:
+  - name: garden
+    subnets:
+      - range: 10.244.17.0/24
+        reserved: [10.244.17.1]
+        static: &garden_addresses
+          - &test_address_1 10.244.17.2
+          - &test_address_2 10.244.17.3
+          - &db_address 10.244.17.9
+
+        cloud_properties:
+          name: random
+
+properties:
+  ducati:
+    database:
+      db_scheme: postgres
+      port: 5432
+      databases:
+      - {name: ducati, tag: whatever}
+      roles:
+      - {name: ducati_daemon, password: some-password, tag: admin}
+    daemon:
+      database:
+        host: *db_address
+        port: 5432
+        username: ducati_daemon
+        password: some-password
+        name: ducati
+        ssl_mode: disable
+  garden:
+    listen_network: tcp
+    listen_address: 0.0.0.0:7777
+    network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
+    network_plugin_extra_args:
+      - "--configFile=/var/vcap/jobs/ducati/config/adapter.json"
+    shared_mounts:
+      - "/var/vcap/data/ducati/container-netns"
+
+jobs:
+  - name: acceptance-tests
+    lifecycle: errand
+    instances: 1
+    templates:
+      - name: acceptance-tests
+        release: ducati
+    resource_pool: garden
+    networks:
+      - name: garden
+    properties:
+      ducati:
+        acceptance_tests:
+          garden_server_1: *test_address_1
+          garden_server_2: *test_address_2
+
+  - name: ducati-db
+    instances: 1
+    persistent_disk: 256
+    templates:
+      - name: postgres
+        release: ducati
+    resource_pool: garden
+    networks:
+      - name: garden
+        static_ips: [ *db_address ]
+
+  - name: garden
+    instances: 2
+    templates:
+      - name: garden
+        release: guardian-dev
+      - name: ducati
+        release: ducati
+    resource_pool: garden
+    networks:
+      - name: garden
+        static_ips: [ *test_address_1, *test_address_2 ]
+
+resource_pools:
+  - name: garden
+    network: garden
+    stemcell:
+      name: bosh-warden-boshlite-ubuntu-trusty-go_agent
+      version: latest
+    cloud_properties:
+      name: random
+
+compilation:
+  workers: 3
+  network: garden
+  cloud_properties:
+    name: random
+
+update:
+  canaries: 1
+  max_in_flight: 3
+  serial: false
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
