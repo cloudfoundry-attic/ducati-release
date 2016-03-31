@@ -46,6 +46,9 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/ossupport/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/watcher/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-dns/cmd/ducati-dns/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-dns/resolver/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-dns/runner/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/*.go # gosub
   - github.com/cloudfoundry-incubator/garden/client/connection/*.go # gosub
@@ -57,6 +60,7 @@ files:
   - github.com/jmoiron/sqlx/reflectx/*.go # gosub
   - github.com/lib/pq/*.go # gosub
   - github.com/lib/pq/oid/*.go # gosub
+  - github.com/miekg/dns/*.go # gosub
   - github.com/onsi/ginkgo/*.go # gosub
   - github.com/onsi/ginkgo/config/*.go # gosub
   - github.com/onsi/ginkgo/ginkgo/*.go # gosub
@@ -81,6 +85,8 @@ files:
   - github.com/onsi/ginkgo/types/*.go # gosub
   - github.com/onsi/gomega/*.go # gosub
   - github.com/onsi/gomega/format/*.go # gosub
+  - github.com/onsi/gomega/gbytes/*.go # gosub
+  - github.com/onsi/gomega/gexec/*.go # gosub
   - github.com/onsi/gomega/internal/assertion/*.go # gosub
   - github.com/onsi/gomega/internal/asyncassertion/*.go # gosub
   - github.com/onsi/gomega/internal/oraclematcher/*.go # gosub
