@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os/exec"
 	"strconv"
 
 	"github.com/cloudfoundry-incubator/garden"
@@ -17,8 +16,6 @@ import (
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.com/onsi/gomega/gbytes"
-	"github.com/onsi/gomega/gexec"
 )
 
 var _ = Describe("Guardian integration with Ducati", func() {
@@ -29,7 +26,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 		var ducatiClient1 *ducati_client.DaemonClient
 		var gardenContainer garden.Container
 		var ducatiContainer *models.Container
-		var dnsServerSession *gexec.Session
 		var listenPort string
 
 		BeforeEach(func() {
@@ -59,16 +55,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 				return errors.New("container not found")
 			}, "5s").Should(Succeed())
-
-			dnsServerCmd := exec.Command(
-				pathToDucatiDNSBinary,
-				"--listenAddress", "127.0.0.1:"+listenPort,
-				"--server", "8.8.8.8:53",
-				"--ducatiSuffix", "potato",
-				"--ducatiAPI", ducatiClient1.BaseURL,
-			)
-			dnsServerSession, err = gexec.Start(dnsServerCmd, GinkgoWriter, GinkgoWriter)
-			Expect(err).NotTo(HaveOccurred())
 		})
 
 		AfterEach(func() {
@@ -80,11 +66,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				containers, err := ducatiClient1.ListNetworkContainers(networkName)
 				return containers, err
 			}, "5s").Should(BeEmpty())
-
-			if dnsServerSession != nil {
-				dnsServerSession.Interrupt()
-				Eventually(dnsServerSession).Should(gexec.Exit())
-			}
 		})
 
 		It("should create interfaces", func() {
@@ -122,22 +103,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			process, err := gardenContainer.Run(pingInternet, ginkgoProcIO())
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(process.Wait).Should(Equal(0))
-		})
-
-		It("resolves requests with with container handle and suffix", func() {
-			containerID := ducatiContainer.ID
-			containerIP := ducatiContainer.IP
-			// run the client
-			clientCmd := exec.Command("dig", "@127.0.0.1", "-p", listenPort, containerID+".potato")
-			clientSession, err := gexec.Start(clientCmd, GinkgoWriter, GinkgoWriter)
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(clientSession).Should(gexec.Exit(0))
-
-			// verify client works
-			Expect(clientSession.Out).To(gbytes.Say(fmt.Sprintf("ANSWER SECTION:\n%s.potato", containerID)))
-			Expect(clientSession.Out).To(gbytes.Say(containerIP))
-
 		})
 
 		Context("when containers share a network", func() {

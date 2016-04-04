@@ -74,3 +74,18 @@
 	path = src/github.com/miekg/dns
 	url = https://github.com/miekg/dns
 	branch = master
+[submodule "src/github.com/pivotal-cf-experimental/warrant"]
+	path = src/github.com/pivotal-cf-experimental/warrant
+	url = https://github.com/pivotal-cf-experimental/warrant
+	branch = master
+[submodule "src/github.com/pivotal-cf-experimental/rainmaker"]
+	path = src/github.com/pivotal-cf-experimental/rainmaker
+	url = https://github.com/pivotal-cf-experimental/rainmaker
+	branch = master
+[submodule "jwt-go"]
+	path = jwt-go
+	url = http://github.com/dgrijalva/jwt-go
+[submodule "src/github.com/dgrijalva/jwt-go"]
+	path = src/github.com/dgrijalva/jwt-go
+	url = https://github.com/dgrijalva/jwt-go
+	branch = master
