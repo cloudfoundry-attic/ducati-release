@@ -33,6 +33,12 @@ pushd ~/workspace/ducati-release
   bosh deployment manifests/ducati-manifest.yml
 popd
 
+mkdir -p ~/Downloads/releases
+pushd ~/Downloads/releases
+  curl -L -o consul-release.tgz https://bosh.io/d/github.com/cloudfoundry-incubator/consul-release
+  bosh upload release consul-release.tgz
+popd
+
 bosh -n deploy
 bosh run errand acceptance-tests
 ```
