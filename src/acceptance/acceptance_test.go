@@ -20,6 +20,7 @@ import (
 
 var _ = Describe("Guardian integration with Ducati", func() {
 	const networkName = "some-network"
+	const networkSpec = `{"network_id": "` + networkName + `"}`
 
 	Context("when there is one garden server", func() {
 		var gardenClient1 garden.Client
@@ -36,7 +37,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			var err error
 			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
-				Network: networkName,
+				Network: networkSpec,
 			})
 			Expect(err).NotTo(HaveOccurred())
 
@@ -112,7 +113,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			BeforeEach(func() {
 				var err error
 				gardenContainer2, err = gardenClient1.Create(garden.ContainerSpec{
-					Network: networkName,
+					Network: networkSpec,
 				})
 				Expect(err).NotTo(HaveOccurred())
 
@@ -191,7 +192,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			var err error
 			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
-				Network: networkName,
+				Network: networkSpec,
 			})
 			Expect(err).NotTo(HaveOccurred())
 
@@ -212,7 +213,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			}, "5s").Should(Succeed())
 
 			gardenContainer2, err = gardenClient2.Create(garden.ContainerSpec{
-				Network: networkName,
+				Network: networkSpec,
 			})
 			Expect(err).NotTo(HaveOccurred())
 
