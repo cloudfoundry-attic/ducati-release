@@ -104,13 +104,12 @@ pushd ~/workspace/diego-release
   git checkout runtime-passed
   ./scripts/update
   ./scripts/generate-bosh-lite-manifests
+  
+  pushd bosh-lite/deployments
+    cat diego.yml | sed 's/garden-linux/guardian/' > diego_with_guardian.yml
+    ducatify --diego diego_with_guardian.yml > diego_with_ducati.yml
+  popd
 popd
-
-cat diego.yml | sed 's/garden-linux/guardian/' > diego_with_guardian.yml
-
-ducatify \
-   --diego ~/workspace/diego-release/bosh-lite/deployments/diego_with_guardian.yml \
-     > ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml
 ```
 
 ```bash
