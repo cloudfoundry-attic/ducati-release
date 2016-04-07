@@ -28,6 +28,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 		var gardenContainer garden.Container
 		var ducatiContainer *models.Container
 		var listenPort string
+		var allContainers []models.Container
 
 		BeforeEach(func() {
 			gardenAddress := fmt.Sprintf("%s:7777", gardenServer1)
@@ -36,6 +37,10 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			listenPort = strconv.Itoa(11999 + GinkgoParallelNode())
 
 			var err error
+
+			allContainers, err = ducatiClient1.ListContainers()
+			Expect(err).NotTo(HaveOccurred())
+
 			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
 				Network: networkSpec,
 			})
@@ -67,6 +72,10 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				containers, err := ducatiClient1.ListNetworkContainers(networkName)
 				return containers, err
 			}, "5s").Should(BeEmpty())
+
+			leftOverContainers, err := ducatiClient1.ListContainers()
+			Expect(err).NotTo(HaveOccurred())
+			Expect(allContainers).To(Equal(leftOverContainers))
 		})
 
 		It("should create interfaces", func() {
