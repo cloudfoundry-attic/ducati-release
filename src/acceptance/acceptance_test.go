@@ -20,7 +20,7 @@ import (
 
 var _ = Describe("Guardian integration with Ducati", func() {
 	const networkName = "some-network"
-	const networkSpec = `{"network_id": "` + networkName + `"}`
+	const networkSpec = `{"network_id": "` + networkName + `", "app": "foo"}`
 
 	Context("when there is one garden server", func() {
 		var gardenClient1 garden.Client
