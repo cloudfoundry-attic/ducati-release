@@ -1,7 +1,12 @@
 ---
 name: utils
 
-dependencies: {}
+dependencies:
+  - golang
 
 files:
-  - utils/*
+  - github.com/appc/cni/pkg/ns/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace/*.go # gosub
+  - golang.org/x/sys/unix/*.go # gosub
+  - golang.org/x/sys/unix/*.s # gosub
+  - utils/netns-exec/*.go # gosub
