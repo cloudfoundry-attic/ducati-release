@@ -4,7 +4,6 @@ templates:
   ducatid_ctl.erb: bin/ducatid_ctl
   adapter.json.erb: config/adapter.json
   daemon.json.erb: config/daemon.json
-  10-bridge.conf.erb: config/cni/10-bridge.conf
   20-vxlan.conf.erb: config/cni/20-vxlan.conf
 
 packages:

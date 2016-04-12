@@ -99,7 +99,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			output := stdout.String()
 			Expect(output).To(ContainSubstring("eth0"))
-			Expect(output).To(ContainSubstring("eth1"))
 		})
 
 		It("should allow access to the internet from inside the container", func() {
