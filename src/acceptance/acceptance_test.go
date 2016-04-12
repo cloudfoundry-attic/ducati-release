@@ -78,7 +78,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Expect(allContainers).To(Equal(leftOverContainers))
 		})
 
-		It("should create interfaces", func() {
+		It("should create the interface", func() {
 			ifconfigProcess := garden.ProcessSpec{
 				Path: "/sbin/ifconfig",
 				Args: []string{"-a"},
@@ -99,19 +99,6 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			output := stdout.String()
 			Expect(output).To(ContainSubstring("eth0"))
-		})
-
-		It("should allow access to the internet from inside the container", func() {
-			pingInternet := garden.ProcessSpec{
-				Path: "/bin/ping",
-				Args: []string{"-c3", "8.8.8.8"},
-				User: "root",
-			}
-
-			GinkgoWriter.Write([]byte("ping the internet\n"))
-			process, err := gardenContainer.Run(pingInternet, ginkgoProcIO())
-			Expect(err).NotTo(HaveOccurred())
-			Eventually(process.Wait).Should(Equal(0))
 		})
 
 		Context("when containers share a network", func() {
