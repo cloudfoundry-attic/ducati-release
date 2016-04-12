@@ -1,5 +1,6 @@
 {
     "name": "ducati-vxlan",
     "type": "vxlan",
-    "daemon_base_url": "http://127.0.0.1:<%= p("ducati.daemon.listen_port") %>"
+    "daemon_base_url": "http://127.0.0.1:<%= p("ducati.daemon.listen_port") %>",
+    "skip_without_network": true
 }
