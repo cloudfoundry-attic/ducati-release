@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/cloudfoundry-incubator/garden"
 	"github.com/cloudfoundry-incubator/garden/client/connection"
@@ -227,6 +228,9 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 				return errors.New("container not found")
 			}, "5s").Should(Succeed())
+			GinkgoWriter.Write([]byte(fmt.Sprintf("%.9f ============= Done with before each, sleeping... ", float64(time.Now().UnixNano())/1e9)))
+			time.Sleep(5 * time.Second)
+			GinkgoWriter.Write([]byte(fmt.Sprintf("%.9f ============= Done sleeping, will now start test", float64(time.Now().UnixNano())/1e9)))
 		})
 
 		AfterEach(func() {
@@ -252,30 +256,32 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Expect(containersList1).To(ConsistOf(containersList2))
 		})
 
-		It("connects the containers", func() {
+		FIt("connects the containers", func() {
 			By("pinging from container 1 to container 2")
 			pingContainer2 := garden.ProcessSpec{
 				Path: "/bin/ping",
-				Args: []string{"-c3", ducatiContainer2.IP},
+				Args: []string{"-c1", ducatiContainer2.IP},
 				User: "root",
 			}
 
 			GinkgoWriter.Write([]byte("ping container 2\n"))
+			GinkgoWriter.Write([]byte(fmt.Sprintf("%.9f ============= FIRST PINGING CONTAINER =======\n\n", float64(time.Now().UnixNano())/1e9)))
 			process, err := gardenContainer.Run(pingContainer2, ginkgoProcIO())
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(process.Wait).Should(Equal(0))
+			GinkgoWriter.Write([]byte(fmt.Sprintf("%.9f ============= PING COMPLETE =======\n\n", float64(time.Now().UnixNano())/1e9)))
 
-			By("pinging from container 2 to container 1")
-			pingContainer1 := garden.ProcessSpec{
-				Path: "/bin/ping",
-				Args: []string{"-c3", ducatiContainer.IP},
-				User: "root",
-			}
+			// By("pinging from container 2 to container 1")
+			// pingContainer1 := garden.ProcessSpec{
+			// 	Path: "/bin/ping",
+			// 	Args: []string{"-c3", ducatiContainer.IP},
+			// 	User: "root",
+			// }
 
-			GinkgoWriter.Write([]byte("ping container 1\n"))
-			process, err = gardenContainer2.Run(pingContainer1, ginkgoProcIO())
-			Expect(err).NotTo(HaveOccurred())
-			Eventually(process.Wait).Should(Equal(0))
+			// GinkgoWriter.Write([]byte("ping container 1\n"))
+			// process, err = gardenContainer2.Run(pingContainer1, ginkgoProcIO())
+			// Expect(err).NotTo(HaveOccurred())
+			// Eventually(process.Wait).Should(Equal(0))
 		})
 	})
 })
