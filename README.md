@@ -50,9 +50,11 @@ bosh run errand acceptance-tests
 Install [Ducatify](https://github.com/cloudfoundry-incubator/ducatify/releases)
 
 ```bash
-chmod +x /usr/local/bin/ducatify
+cd ~/go
+go get -u github.com/cloudfoundry-incubator/ducatify/cmd/ducatify
 ```
 
+Then do the BOSH dance:
 
 ```bash
 bosh target lite
@@ -61,23 +63,21 @@ mkdir -p ~/Downloads/releases
 
 pushd ~/Downloads/releases
   curl -L -o etcd-release.tgz https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release
-  curl -L -o diego-release.tgz https://bosh.io/d/github.com/cloudfoundry-incubator/diego-release
   curl -L -o cf-release.tgz https://bosh.io/d/github.com/cloudfoundry/cf-release
- 
+
   bosh upload release etcd-release.tgz
-  bosh upload release diego-release.tgz
   bosh upload release cf-release.tgz
 popd
 
 pushd ~/workspace
-  git clone https://github.com/cloudfoundry-incubator/diego-release
+  git clone https://github.com/sykesm/diego-release
   git clone https://github.com/cloudfoundry/cf-release
   git clone https://github.com/cloudfoundry-incubator/ducati-release
   git clone https://github.com/cloudfoundry-incubator/guardian-release
 popd
 
 pushd ~/workspace/guardian-release
-  git checkout master
+  git checkout develop
   git pull
   git submodule sync
   git submodule update --init --recursive
@@ -91,9 +91,7 @@ pushd ~/workspace/ducati-release
   git submodule update --init --recursive
   bosh create release --force && bosh -n upload release
 popd
-```
 
-```bash
 pushd ~/workspace/cf-release
   git checkout runtime-passed
   ./scripts/update
@@ -101,18 +99,17 @@ pushd ~/workspace/cf-release
 popd
 
 pushd ~/workspace/diego-release
-  git checkout runtime-passed
+  git checkout ducati-dev
   ./scripts/update
-  ./scripts/generate-bosh-lite-manifests
-  
+  bosh create release
+  bosh upload release
+  ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
+
   pushd bosh-lite/deployments
-    cat diego.yml | sed 's/garden-linux/guardian/' > diego_with_guardian.yml
-    ducatify --diego diego_with_guardian.yml > diego_with_ducati.yml
+    ducatify --diego diego.yml > diego_with_ducati.yml
   popd
 popd
-```
 
-```bash
 bosh -n -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml deploy
 bosh -n -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
 
