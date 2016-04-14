@@ -21,7 +21,7 @@ pushd ~/workspace/guardian-release
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh create release
+  bosh -n create release
   bosh upload release
 popd
 
@@ -29,7 +29,7 @@ pushd ~/workspace/ducati-release
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh create release --force && bosh -n upload release
+  bosh -n create release --force && bosh -n upload release
   bosh deployment manifests/ducati-manifest.yml
 popd
 
@@ -81,7 +81,7 @@ pushd ~/workspace/guardian-release
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh create release --force && bosh -n upload release
+  bosh -n create release --force && bosh -n upload release
 popd
 
 pushd ~/workspace/ducati-release
@@ -89,7 +89,7 @@ pushd ~/workspace/ducati-release
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh create release --force && bosh -n upload release
+  bosh -n create release --force && bosh -n upload release
 popd
 
 pushd ~/workspace/cf-release
@@ -101,7 +101,7 @@ popd
 pushd ~/workspace/diego-release
   git checkout ducati-dev
   ./scripts/update
-  bosh create release
+  bosh -n create release
   bosh upload release
   ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
 
