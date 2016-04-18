@@ -1,0 +1,5 @@
+{
+	"ImportPath": "acceptance/example-apps/proxy",
+	"GoVersion": "go1.6.1",
+	"Deps": []
+}
