@@ -1,0 +1,11 @@
+---
+name: acceptance-with-cf
+
+templates:
+  test.sh.erb: bin/run
+  config.json.erb: bin/config.json
+
+packages:
+  - ducati
+  - golang
+  - cli
