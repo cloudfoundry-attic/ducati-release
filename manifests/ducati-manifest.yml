@@ -228,6 +228,14 @@ properties:
     shared_mounts:
       - "/var/vcap/data/ducati/container-netns"
 
+  acceptance-with-cf:
+    api: api.bosh-lite.com
+    admin_password: admin
+    admin_user: admin
+    apps_domain: bosh-lite.com
+    skip_ssl_validation: true
+    ginkgo_opts: null
+
 jobs:
   - name: acceptance-tests
     lifecycle: errand
