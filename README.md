@@ -106,7 +106,7 @@ pushd ~/workspace/diego-release
   ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
 
   pushd bosh-lite/deployments
-    ducatify --diego diego.yml > diego_with_ducati.yml
+    ducatify --diego diego.yml --cfCreds manifests/cf_creds_stub.yml > diego_with_ducati.yml
   popd
 popd
 
@@ -114,4 +114,5 @@ bosh -n -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml deploy
 bosh -n -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
 
 bosh -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml run errand acceptance_tests
+bosh -d ~/workspace/cf-release/bosh-lite/deployments/diego_with_ducati.yml run errand ducati-acceptance
 ```
