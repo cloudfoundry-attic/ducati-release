@@ -219,6 +219,7 @@ properties:
         name: ducati
         ssl_mode: disable
   garden:
+    default_container_grace_time: 90m
     listen_network: tcp
     listen_address: 0.0.0.0:7777
     network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
