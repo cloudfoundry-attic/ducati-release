@@ -8,6 +8,7 @@ This release should be deployed so that the `ducati` job co-locates with the `ga
 - [Deploying with Diego](#deploying-with-diego)
 
 ## Running tests
+
 ```bash
 docker-machine create --driver virtualbox --virtualbox-cpu-count 4 --virtualbox-memory 2048 dev-box
 eval $(docker-machine env dev-box)
@@ -15,6 +16,7 @@ eval $(docker-machine env dev-box)
 ```
 
 ## Deploy and test in isolation
+
 ```bash
 bosh target lite
 pushd ~/workspace/guardian-release
@@ -43,8 +45,6 @@ bosh -n deploy
 bosh run errand acceptance-tests
 ```
 
-
-
 ## Deploying with Diego
 
 Install [Ducatify](https://github.com/cloudfoundry-incubator/ducatify/releases)
@@ -54,7 +54,7 @@ cd ~/go
 go get -u github.com/cloudfoundry-incubator/ducatify/cmd/ducatify
 ```
 
-Then do the BOSH dance:
+Then get, create, and upload the necessary releases:
 
 ```bash
 bosh target lite
@@ -76,6 +76,11 @@ pushd ~/workspace
   git clone https://github.com/cloudfoundry-incubator/guardian-release
 popd
 
+pushd ~/workspace/cf-release
+  git checkout runtime-passed
+  ./scripts/update
+popd
+
 pushd ~/workspace/guardian-release
   git checkout develop
   git pull
@@ -86,16 +91,8 @@ popd
 
 pushd ~/workspace/ducati-release
   git checkout master
-  git pull
-  git submodule sync
-  git submodule update --init --recursive
-  bosh -n create release --force && bosh -n upload release
-popd
-
-pushd ~/workspace/cf-release
-  git checkout runtime-passed
   ./scripts/update
-  ./scripts/generate-bosh-lite-dev-manifest
+  bosh -n create release --force && bosh -n upload release
 popd
 
 pushd ~/workspace/diego-release
@@ -103,16 +100,28 @@ pushd ~/workspace/diego-release
   ./scripts/update
   bosh -n create release
   bosh upload release
-  ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
+popd
+```
 
-  pushd bosh-lite/deployments
-    ducatify --diego diego.yml --cfCreds ~/workspace/ducati-release/manifests/cf_creds_stub.yml > diego_with_ducati.yml
+Finally, generate the manifests and deploy:
+
+```
+pushd ~/workspace/ducati-release
+  ~/workspace/cf-release/scripts/generate-bosh-lite-dev-manifest manifests/cf-overrides.yml
+
+  pushd ~/workspace/diego-release
+    ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
   popd
+
+  ducatify \
+      --diego ~/workspace/diego-release/bosh-lite/deployments/diego.yml \
+      --cfCreds manifests/cf_creds_stub.yml \
+      > ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml
 popd
 
 bosh -n -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml deploy
 bosh -n -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
 
 bosh -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml run errand acceptance_tests
-bosh -d ~/workspace/cf-release/bosh-lite/deployments/diego_with_ducati.yml run errand ducati-acceptance
+bosh -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml run errand ducati-acceptance
 ```
