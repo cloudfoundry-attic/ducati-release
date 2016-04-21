@@ -31,6 +31,14 @@ properties:
     description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
     default: 192.168.0.0/16
 
+  ducati.daemon.overlay_dns_address:
+    description: "IP address to use for the overlay DNS server"
+    default: 192.168.255.254
+
+  ducati.daemon.dns_server:
+    description: "DNS forwarding target for hosts that are not part of the overlay domain"
+    default: 8.8.8.8
+
   ducati.daemon.sandbox_dir:
     description: "Directory to hold sandbox network namespaces"
     default: /var/vcap/data/ducati/sandbox
