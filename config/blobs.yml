@@ -3,11 +3,11 @@ postgres/postgresql-9.4.5.tar.gz:
   object_id: 4cace641-03d8-441e-9011-b309e8afb1f4
   sha: 5278d04093f3cb2e00796fae15b2e33406844d01
   size: 23211720
-golang/go1.6.1.linux-amd64.tar.gz:
-  object_id: d0cc93e2-c5bd-4a2b-a5a7-3a20b4498feb
-  sha: c73492474dcc7a233772d27e948b74468d9f1849
-  size: 84824395
 cli/cf-linux-amd64.tgz:
   object_id: 204d4ced-3cfc-45c5-b8ea-80ce99b83fac
   sha: ad1782a564c5bf47270e1bfbe0fdd1298394a1d0
   size: 6104120
+golang/go1.6.2.linux-amd64.tar.gz:
+  object_id: b70fa9a1-6dfb-432b-bab7-5c54ab76ce4f
+  sha: b8318b09de06076d5397e6ec18ebef3b45cd315d
+  size: 84840658
