@@ -106,7 +106,7 @@ pushd ~/workspace/diego-release
   ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
 
   pushd bosh-lite/deployments
-    ducatify --diego diego.yml --cfCreds manifests/cf_creds_stub.yml > diego_with_ducati.yml
+    ducatify --diego diego.yml --cfCreds ~/workspace/ducati-release/manifests/cf_creds_stub.yml > diego_with_ducati.yml
   popd
 popd
 
