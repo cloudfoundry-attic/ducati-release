@@ -37,7 +37,6 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/cni/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/config/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/container/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-daemon/db/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/executor/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/executor/commands/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/executor/conditions/*.go # gosub
@@ -126,3 +125,4 @@ files:
   - github.com/vishvananda/netlink/nl/*.go # gosub
   - golang.org/x/sys/unix/*.go # gosub
   - golang.org/x/sys/unix/*.s # gosub
+  - lib/db/*.go # gosub
