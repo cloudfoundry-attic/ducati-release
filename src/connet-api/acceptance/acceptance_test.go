@@ -17,14 +17,19 @@ var _ = Describe("Acceptance", func() {
 	var (
 		session      *gexec.Session
 		conf         config.Config
-		connetClient *client.ConnetClient
+		connetClient client.ConnetClient
 		address      string
 	)
+
+	var serverIsAvailable = func() error {
+		return VerifyTCPConnection(address)
+	}
 
 	BeforeEach(func() {
 		conf = config.Config{
 			ListenHost: "127.0.0.1",
 			ListenPort: 9001 + GinkgoParallelNode(),
+			Database:   testDatabase.DBConfig(),
 		}
 		configFilePath := WriteConfigFile(conf)
 
@@ -35,11 +40,9 @@ var _ = Describe("Acceptance", func() {
 
 		address = fmt.Sprintf("%s:%d", conf.ListenHost, conf.ListenPort)
 		connetClient = client.New("http://"+address, http.DefaultClient)
-	})
 
-	var serverIsAvailable = func() error {
-		return VerifyTCPConnection(address)
-	}
+		Eventually(serverIsAvailable, DEFAULT_TIMEOUT).Should(Succeed())
+	})
 
 	AfterEach(func() {
 		session.Interrupt()
@@ -47,8 +50,6 @@ var _ = Describe("Acceptance", func() {
 	})
 
 	It("should boot and gracefully terminate", func() {
-		Eventually(serverIsAvailable, DEFAULT_TIMEOUT).Should(Succeed())
-
 		Consistently(session).ShouldNot(gexec.Exit())
 
 		session.Interrupt()

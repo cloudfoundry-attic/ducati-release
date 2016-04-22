@@ -85,11 +85,11 @@ func VerifyTCPConnection(address string) error {
 	return nil
 }
 
-func WriteConfigFile(daemonConfig config.Config) string {
+func WriteConfigFile(connetConfig config.Config) string {
 	configFile, err := ioutil.TempFile("", "test-config")
 	Expect(err).NotTo(HaveOccurred())
 
-	daemonConfig.Marshal(configFile)
+	connetConfig.Marshal(configFile)
 	Expect(configFile.Close()).To(Succeed())
 
 	return configFile.Name()

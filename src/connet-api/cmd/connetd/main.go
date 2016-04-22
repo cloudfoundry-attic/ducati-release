@@ -2,25 +2,24 @@ package main
 
 import (
 	"connet-api/config"
+	"connet-api/handlers"
+	"connet-api/store"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"lib/db"
+	"lib/marshal"
 	"log"
-	"net/http"
 	"os"
+	"time"
 
+	"github.com/pivotal-golang/lager"
 	"github.com/tedsuo/ifrit"
 	"github.com/tedsuo/ifrit/grouper"
 	"github.com/tedsuo/ifrit/http_server"
 	"github.com/tedsuo/ifrit/sigmon"
 	"github.com/tedsuo/rata"
 )
-
-type MyHandler struct {
-}
-
-func (h *MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello world"))
-}
 
 const configFileFlag = "configFile"
 
@@ -34,11 +33,41 @@ func main() {
 		log.Fatalf("parsing config: %s", err)
 	}
 
+	logger := lager.NewLogger("connetd")
+	logger.RegisterSink(lager.NewWriterSink(os.Stdout, lager.INFO))
+
+	retriableConnector := db.RetriableConnector{
+		Connector:     db.GetConnectionPool,
+		Sleeper:       db.SleeperFunc(time.Sleep),
+		RetryInterval: 3 * time.Second,
+		MaxRetries:    10,
+	}
+
+	databaseURL, err := conf.Database.PostgresURL()
+	if err != nil {
+		log.Fatalf("db config: %s", err)
+	}
+
+	dbConnectionPool, err := retriableConnector.GetConnectionPool(databaseURL)
+	if err != nil {
+		log.Fatalf("db connect: %s", err)
+	}
+
+	dataStore, err := store.New(dbConnectionPool)
+	if err != nil {
+		log.Fatalf("failed to construct datastore: %s", err)
+	}
+
 	rataHandlers := rata.Handlers{}
-	rataHandlers["hello"] = &MyHandler{}
+
+	rataHandlers["add_route"] = &handlers.AddRoute{
+		Logger:      logger,
+		Store:       dataStore,
+		Unmarshaler: marshal.UnmarshalFunc(json.Unmarshal),
+	}
 
 	routes := rata.Routes{
-		{Name: "hello", Method: "GET", Path: "/"},
+		{Name: "add_route", Method: "POST", Path: "/routes"},
 	}
 
 	rataRouter, err := rata.NewRouter(routes, rataHandlers)
@@ -46,7 +75,10 @@ func main() {
 		log.Fatalf("unable to create rata Router: %s", err) // not tested
 	}
 
-	httpServer := http_server.New(fmt.Sprintf("%s:%d", conf.ListenHost, conf.ListenPort), rataRouter)
+	httpServer := http_server.New(
+		fmt.Sprintf("%s:%d", conf.ListenHost, conf.ListenPort),
+		rataRouter,
+	)
 
 	members := grouper.Members{
 		{"http_server", httpServer},

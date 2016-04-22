@@ -2,8 +2,10 @@ package testsupport
 
 import (
 	"fmt"
+	"lib/db"
 	"os"
 	"os/exec"
+	"strconv"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -25,6 +27,20 @@ type TestDatabase struct {
 func (d *TestDatabase) URL() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		d.ConnInfo.Username, d.ConnInfo.Password, d.ConnInfo.Hostname, d.ConnInfo.Port, d.Name, "disable")
+}
+
+func (d *TestDatabase) DBConfig() db.Config {
+	port, err := strconv.Atoi(d.ConnInfo.Port)
+	Expect(err).NotTo(HaveOccurred())
+
+	return db.Config{
+		Host:     d.ConnInfo.Hostname,
+		Port:     port,
+		Username: d.ConnInfo.Username,
+		Password: d.ConnInfo.Password,
+		Name:     d.Name,
+		SSLMode:  "disable",
+	}
 }
 
 func (d *TestDatabase) Destroy() {

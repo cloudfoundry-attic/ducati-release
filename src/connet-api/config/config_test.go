@@ -3,49 +3,42 @@ package config_test
 import (
 	"connet-api/config"
 	"io/ioutil"
+	"lib/db"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-const fixtureJSON = `
-{
-	"listen_host": "0.0.0.0",
-	"listen_port": 4001
-}
-`
-
 var _ = Describe("config", func() {
 	var fixtureConfig config.Config
 
 	BeforeEach(func() {
-		Expect(true).To(BeTrue())
 		fixtureConfig = config.Config{
 			ListenHost: "127.0.0.1",
 			ListenPort: 1234,
+			Database: db.Config{
+				Host:     "example.com",
+				Port:     9953,
+				Username: "bob",
+				Password: "secret",
+				Name:     "database1",
+				SSLMode:  "false",
+			},
 		}
 	})
 
 	Describe("loading config from a file", func() {
-		It("returns the parsed and validated config", func() {
-			configSource := config.Config{
-				ListenHost: "127.0.0.1",
-				ListenPort: 4001,
-			}
-
+		It("returns the parsed config", func() {
 			configFile, err := ioutil.TempFile("", "config")
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(configSource.Marshal(configFile)).To(Succeed())
+			Expect(fixtureConfig.Marshal(configFile)).To(Succeed())
 			configFile.Close()
 
 			conf, err := config.ParseConfigFile(configFile.Name())
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(conf).To(Equal(&config.Config{
-				ListenHost: "127.0.0.1",
-				ListenPort: 4001,
-			}))
+			Expect(conf).To(Equal(&fixtureConfig))
 		})
 
 		Context("when configFilePath is not present", func() {

@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"lib/db"
 	"os"
 )
 
 type Config struct {
-	ListenHost string `json:"listen_host"`
-	ListenPort int    `json:"listen_port"`
+	ListenHost string    `json:"listen_host"`
+	ListenPort int       `json:"listen_port"`
+	Database   db.Config `json: "database"`
 }
 
 func (c Config) Marshal(output io.Writer) error {
