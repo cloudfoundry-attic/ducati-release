@@ -26,7 +26,7 @@ var _ = Describe("Store", func() {
 	BeforeEach(func() {
 		mockDb = &fakes.Db{}
 
-		dbName := fmt.Sprintf("test_database_%x", rand.Int())
+		dbName := fmt.Sprintf("test_connet_database_%x", rand.Int())
 		dbConnectionInfo := testsupport.GetDBConnectionInfo()
 		testDatabase = dbConnectionInfo.CreateDatabase(dbName)
 
