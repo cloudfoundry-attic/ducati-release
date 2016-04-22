@@ -78,3 +78,11 @@ properties:
   ducati.adapter.log_dir:
     description: "The CNI adapter will drop logs here"
     default: /var/vcap/sys/log/ducati/adapter
+
+  ducati.adapter.garden.address:
+    description: "Garden server listening address"
+    default: /var/vcap/data/garden/garden.sock
+
+  ducati.adapter.garden.network:
+    description: "Network type for the garden server connection (tcp or unix)."
+    default: unix

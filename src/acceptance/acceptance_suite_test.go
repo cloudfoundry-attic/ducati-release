@@ -1,9 +1,11 @@
 package acceptance_test
 
 import (
+	"math/rand"
 	"os"
 
 	. "github.com/onsi/ginkgo"
+	"github.com/onsi/ginkgo/config"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
 
@@ -31,6 +33,8 @@ var _ = BeforeSuite(func() {
 	var err error
 	pathToDucatiDNSBinary, err = gexec.Build("github.com/cloudfoundry-incubator/ducati-dns/cmd/ducati-dns")
 	Expect(err).NotTo(HaveOccurred())
+
+	rand.Seed(config.GinkgoConfig.RandomSeed)
 })
 
 var _ = AfterSuite(func() {

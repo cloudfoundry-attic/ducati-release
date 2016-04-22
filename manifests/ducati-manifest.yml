@@ -218,6 +218,11 @@ properties:
         password: some-password
         name: ducati
         ssl_mode: disable
+    adapter:
+      garden:
+        address: 127.0.0.1:7777
+        network: tcp
+
   garden:
     default_container_grace_time: 90m
     listen_network: tcp
