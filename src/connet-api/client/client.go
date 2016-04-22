@@ -18,8 +18,10 @@ type ConnetClient interface {
 }
 
 func New(url string, httpClient *http.Client) ConnetClient {
+	slingClient := sling.New().Client(httpClient).Base(url).Set("Accept", "application/json")
+
 	return &connetClient{
-		slingClient: sling.New().Client(httpClient).Base(url),
+		slingClient: slingClient,
 	}
 }
 
@@ -37,5 +39,16 @@ func (c *connetClient) AddRoute(route models.Route) error {
 }
 
 func (c *connetClient) ListRoutes() ([]models.Route, error) {
-	panic("not implemented")
+	var routes []models.Route
+
+	resp, err := c.slingClient.New().Get("/routes").Receive(&routes, nil)
+	if err != nil {
+		return nil, fmt.Errorf("list routes: %s", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("list routes: unexpected status code: %s", resp.Status)
+	}
+
+	return routes, nil
 }

@@ -11,13 +11,14 @@ import (
 )
 
 type AddRoute struct {
-	Store       store.Store
 	Logger      lager.Logger
+	Store       store.Store
 	Unmarshaler marshal.Unmarshaler
 }
 
 func (h *AddRoute) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	logger := h.Logger.Session("add-route")
+	resp.Header().Set("content-type", "application/json")
 
 	payload, err := ioutil.ReadAll(req.Body)
 	if err != nil {

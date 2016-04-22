@@ -37,7 +37,7 @@ var _ = Describe("Client", func() {
 		server.Close()
 	})
 
-	Describe("Create", func() {
+	Describe("AddRoute", func() {
 		var route models.Route
 
 		BeforeEach(func() {
@@ -79,7 +79,7 @@ var _ = Describe("Client", func() {
 			})
 		})
 
-		Context("when the response is not 201 StatusCreated", func() {
+		Context("when the response status is not 201 StatusCreated", func() {
 			BeforeEach(func() {
 				server.RouteToHandler("POST", "/routes", ghttp.CombineHandlers(
 					ghttp.RespondWithJSONEncoded(http.StatusBadRequest, ""),
@@ -91,6 +91,73 @@ var _ = Describe("Client", func() {
 
 				Expect(server.ReceivedRequests()).To(HaveLen(1))
 				Expect(err).To(MatchError("add route: unexpected status code: 400 Bad Request"))
+			})
+		})
+	})
+
+	Describe("ListRoutes", func() {
+		var expectedRoutes []models.Route
+
+		BeforeEach(func() {
+			expectedRoutes = []models.Route{{
+				AppGuid: "my-application-guid",
+				Fqdn:    "my-application-name.cloudfoundry",
+			}, {
+				AppGuid: "my-other-application-guid",
+				Fqdn:    "my-other-application-name.cloudfoundry",
+			}}
+
+			server.AppendHandlers(ghttp.CombineHandlers(
+				ghttp.VerifyRequest("GET", "/routes"),
+				ghttp.VerifyHeaderKV("Accept", "application/json"),
+				ghttp.RespondWithJSONEncoded(http.StatusOK, expectedRoutes),
+			))
+		})
+
+		It("makes a GET request against /routes", func() {
+			_, err := c.ListRoutes()
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(server.ReceivedRequests()).To(HaveLen(1))
+		})
+
+		It("marshals the response into a slice of routes", func() {
+			routes, err := c.ListRoutes()
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(routes).To(Equal(expectedRoutes))
+		})
+
+		It("uses the provided http client", func() {
+			_, err := c.ListRoutes()
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(roundTripper.RoundTripCallCount()).To(Equal(1))
+		})
+
+		Context("when the request fails", func() {
+			BeforeEach(func() {
+				roundTripper.RoundTripReturns(nil, errors.New("potato"))
+			})
+
+			It("returns the error", func() {
+				_, err := c.ListRoutes()
+				Expect(err).To(MatchError(MatchRegexp("list routes:.*potato")))
+			})
+		})
+
+		Context("when the response status is not 200 StatusOK", func() {
+			BeforeEach(func() {
+				server.RouteToHandler("GET", "/routes", ghttp.CombineHandlers(
+					ghttp.RespondWithJSONEncoded(http.StatusBadRequest, ""),
+				))
+			})
+
+			It("returns an error", func() {
+				_, err := c.ListRoutes()
+
+				Expect(server.ReceivedRequests()).To(HaveLen(1))
+				Expect(err).To(MatchError("list routes: unexpected status code: 400 Bad Request"))
 			})
 		})
 	})

@@ -32,6 +32,7 @@ var _ = Describe("AddRoute", func() {
 		request      *http.Request
 		payload      models.Route
 		payloadBytes []byte
+		resp         *httptest.ResponseRecorder
 	)
 
 	BeforeEach(func() {
@@ -49,6 +50,7 @@ var _ = Describe("AddRoute", func() {
 		}
 
 		handler, request = rataWrap(addRouteHandler, "POST", "/routes", rata.Params{})
+		resp = httptest.NewRecorder()
 
 		payload = models.Route{
 			AppGuid: "my-application-guid",
@@ -63,7 +65,6 @@ var _ = Describe("AddRoute", func() {
 
 	Context("when everything works", func() {
 		It("unmarshals the payload", func() {
-			resp := httptest.NewRecorder()
 			handler.ServeHTTP(resp, request)
 
 			Expect(unmarshaler.UnmarshalCallCount()).To(Equal(1))
@@ -72,7 +73,6 @@ var _ = Describe("AddRoute", func() {
 		})
 
 		It("creates a route in the store", func() {
-			resp := httptest.NewRecorder()
 			handler.ServeHTTP(resp, request)
 
 			Expect(store.CreateCallCount()).To(Equal(1))
@@ -82,15 +82,19 @@ var _ = Describe("AddRoute", func() {
 		})
 
 		It("succeeds with a 201 CREATED", func() {
-			resp := httptest.NewRecorder()
 			handler.ServeHTTP(resp, request)
 
 			Expect(resp.Code).To(Equal(http.StatusCreated))
 			Expect(resp.Body.String()).To(BeEmpty())
 		})
 
+		It("sets the content-type to application/json", func() {
+			handler.ServeHTTP(resp, request)
+
+			Expect(resp.Header().Get("Content-Type")).To(Equal("application/json"))
+		})
+
 		It("logs the request payload and completion", func() {
-			resp := httptest.NewRecorder()
 			handler.ServeHTTP(resp, request)
 
 			Expect(logger).To(gbytes.Say("add-route.adding.*route.*my-application-guid"))
@@ -104,7 +108,6 @@ var _ = Describe("AddRoute", func() {
 		})
 
 		It("fails with a 500 internal server error", func() {
-			resp := httptest.NewRecorder()
 			handler.ServeHTTP(resp, request)
 
 			Expect(resp.Code).To(Equal(http.StatusInternalServerError))
@@ -118,14 +121,12 @@ var _ = Describe("AddRoute", func() {
 			})
 
 			It("fails with a 400 bad request", func() {
-				resp := httptest.NewRecorder()
 				handler.ServeHTTP(resp, request)
 
 				Expect(resp.Code).To(Equal(http.StatusBadRequest))
 			})
 
 			It("does not create a route", func() {
-				resp := httptest.NewRecorder()
 				handler.ServeHTTP(resp, request)
 
 				Expect(store.CreateCallCount()).To(Equal(0))

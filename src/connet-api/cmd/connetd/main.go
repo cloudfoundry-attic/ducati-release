@@ -65,9 +65,15 @@ func main() {
 		Store:       dataStore,
 		Unmarshaler: marshal.UnmarshalFunc(json.Unmarshal),
 	}
+	rataHandlers["list_routes"] = &handlers.ListRoutes{
+		Logger:    logger,
+		Store:     dataStore,
+		Marshaler: marshal.MarshalFunc(json.Marshal),
+	}
 
 	routes := rata.Routes{
 		{Name: "add_route", Method: "POST", Path: "/routes"},
+		{Name: "list_routes", Method: "GET", Path: "/routes"},
 	}
 
 	rataRouter, err := rata.NewRouter(routes, rataHandlers)
