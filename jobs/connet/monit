@@ -1,0 +1,5 @@
+check process connetd
+  with pidfile /var/vcap/sys/run/connet/connetd.pid
+  start program "/var/vcap/jobs/connet/bin/connetd_ctl start"
+  stop program "/var/vcap/jobs/connet/bin/connetd_ctl stop"
+  group vcap

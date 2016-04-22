@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e -u
+
+RUN_DIR=/var/vcap/sys/run/connet
+LOG_DIR=/var/vcap/sys/log/connet
+PIDFILE=$RUN_DIR/connetd.pid
+
+mkdir -p /var/vcap/sys/log/monit
+exec 1>> /var/vcap/sys/log/monit/connetd.out.log
+exec 2>> /var/vcap/sys/log/monit/connetd.err.log
+
+
+case $1 in
+
+  start)
+
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    exec /var/vcap/packages/connet/bin/connetd \
+      -configFile=/var/vcap/jobs/connet/config/connet.json \
+      1>>$LOG_DIR/connetd.stdout.log \
+      2>>$LOG_DIR/connetd.stderr.log
+
+    ;;
+
+  stop)
+
+    kill -INT $(cat $PIDFILE)
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

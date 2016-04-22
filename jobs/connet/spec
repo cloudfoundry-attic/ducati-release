@@ -1,0 +1,37 @@
+---
+name: connet
+templates:
+  connetd_ctl.erb: bin/connetd_ctl
+  connet.json.erb: config/connet.json
+
+packages:
+  - connet
+
+properties:
+  connet.daemon.listen_host:
+    description: "Host where the connet daemon will serve its API"
+    default: 0.0.0.0
+
+  connet.daemon.listen_port:
+    description: "Port where the connet daemon will serve its API"
+    default: 4002
+
+  connet.daemon.database.host:
+    description: "IP or DNS name of the database host"
+
+  connet.daemon.database.port:
+    description: "Port to connect to on the database host"
+    default: 5432
+
+  connet.daemon.database.username:
+    description: "Username for logging into the database"
+
+  connet.daemon.database.password:
+    description: "Password for logging into the database"
+
+  connet.daemon.database.name:
+    description: "Name of the database to use on the host"
+
+  connet.daemon.database.ssl_mode:
+    description: "SSL security mode.  See http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING"
+    default: require

@@ -211,13 +211,19 @@ properties:
       roles:
       - {name: ducati_daemon, password: some-password, tag: admin}
     daemon:
-      database:
+      database: &daemon_database
         host: ducati-db.service.cf.internal
         port: 5432
         username: ducati_daemon
         password: some-password
         name: ducati
         ssl_mode: disable
+
+  connet:
+    daemon:
+      database:
+        <<: *daemon_database
+
   garden:
     default_container_grace_time: 90m
     listen_network: tcp
@@ -293,6 +299,8 @@ jobs:
       - name: garden
         release: guardian
       - name: ducati
+        release: ducati
+      - name: connet
         release: ducati
       - name: consul_agent
         release: consul
