@@ -3,7 +3,7 @@ package db_test
 import (
 	"errors"
 	"lib/db"
-	"lib/db/fakes"
+	"lib/fakes"
 	"time"
 
 	"github.com/jmoiron/sqlx"

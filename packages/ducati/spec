@@ -48,7 +48,6 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/neigh/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/nl/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/subscriber/*.go # gosub
-  - github.com/cloudfoundry-incubator/ducati-daemon/marshal/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/ossupport/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/sandbox/*.go # gosub
@@ -126,3 +125,4 @@ files:
   - golang.org/x/sys/unix/*.go # gosub
   - golang.org/x/sys/unix/*.s # gosub
   - lib/db/*.go # gosub
+  - lib/marshal/*.go # gosub

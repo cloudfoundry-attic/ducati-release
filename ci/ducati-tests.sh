@@ -6,6 +6,7 @@ cd ducati-release
 export GOPATH=$PWD
 
 declare -a packages=(
+  "src/lib"
   "src/github.com/cloudfoundry-incubator/ducati-daemon"
   "src/github.com/cloudfoundry-incubator/ducati-dns"
   "src/github.com/cloudfoundry-incubator/ducati-cni-plugins"

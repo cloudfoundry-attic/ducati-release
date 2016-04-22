@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-//go:generate counterfeiter -o fakes/sleeper.go --fake-name Sleeper . sleeper
+//go:generate counterfeiter -o ../fakes/sleeper.go --fake-name Sleeper . sleeper
 type sleeper interface {
 	Sleep(time.Duration)
 }

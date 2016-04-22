@@ -3,9 +3,9 @@ package db_test
 import (
 	"fmt"
 	"lib/db"
+	"lib/testsupport"
 	"net/url"
 
-	"github.com/cloudfoundry-incubator/ducati-daemon/testsupport"
 	"github.com/nu7hatch/gouuid"
 
 	. "github.com/onsi/ginkgo"
