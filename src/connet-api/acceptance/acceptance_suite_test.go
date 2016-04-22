@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"lib/testsupport"
 	"math/rand"
 	"net"
 
-	"github.com/cloudfoundry-incubator/ducati-daemon/testsupport"
 	. "github.com/onsi/ginkgo"
 	gconfig "github.com/onsi/ginkgo/config"
 	. "github.com/onsi/gomega"
