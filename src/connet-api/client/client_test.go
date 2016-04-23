@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/cloudfoundry-incubator/ducati-daemon/fakes"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/ghttp"
@@ -158,6 +159,24 @@ var _ = Describe("Client", func() {
 
 				Expect(server.ReceivedRequests()).To(HaveLen(1))
 				Expect(err).To(MatchError("list routes: unexpected status code: 400 Bad Request"))
+			})
+		})
+
+		Context("when the response can't be unmarshaled", func() {
+			BeforeEach(func() {
+				jsonHeader := http.Header{}
+				jsonHeader.Add("content-type", "application/json")
+
+				server.RouteToHandler("GET", "/routes", ghttp.CombineHandlers(
+					ghttp.RespondWith(http.StatusOK, "!@#$%^", jsonHeader),
+				))
+			})
+
+			It("returns an error", func() {
+				_, err := c.ListRoutes()
+
+				Expect(server.ReceivedRequests()).To(HaveLen(1))
+				Expect(err).To(MatchError(HavePrefix("list routes: invalid character '!'")))
 			})
 		})
 	})
