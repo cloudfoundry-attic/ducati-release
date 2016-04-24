@@ -82,7 +82,7 @@ pushd ~/workspace/cf-release
 popd
 
 pushd ~/workspace/guardian-release
-  git checkout develop
+  git checkout master
   git pull
   git submodule sync
   git submodule update --init --recursive
