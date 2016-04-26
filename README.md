@@ -112,7 +112,9 @@ DIEGO_DEPLOY=~/workspace/diego-release/bosh-lite/deployments
 pushd ~/workspace
   cf-release/scripts/generate-bosh-lite-dev-manifest ducati-release/manifests/cf-overrides.yml
 
-  diego-release/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
+  pushd diego-release
+    scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
+  popd
 
   sed 's/guardian-release/garden-runc-release/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego1.yml
 
