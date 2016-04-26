@@ -107,6 +107,14 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Expect(output).To(ContainSubstring("eth0"))
 		})
 
+		It("should use the network properties to configure the container", func() {
+			By("checking that the app id propagates")
+			Expect(ducatiContainer.App).To(Equal(appID))
+
+			By("checking that the space id is used as the network id")
+			Expect(ducatiContainer.NetworkID).To(Equal(spaceID))
+		})
+
 		Context("when containers share a network", func() {
 			var gardenContainer2 garden.Container
 			var ducatiContainer2 *models.Container
