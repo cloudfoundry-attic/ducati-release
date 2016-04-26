@@ -73,7 +73,7 @@ pushd ~/workspace
   git clone https://github.com/sykesm/diego-release
   git clone https://github.com/cloudfoundry/cf-release
   git clone https://github.com/cloudfoundry-incubator/ducati-release
-  git clone https://github.com/cloudfoundry-incubator/guardian-release
+  git clone https://github.com/sykesm/guardian-release
 popd
 
 pushd ~/workspace/cf-release
@@ -82,7 +82,7 @@ pushd ~/workspace/cf-release
 popd
 
 pushd ~/workspace/guardian-release
-  git checkout master
+  git checkout ducati-dev
   git pull
   git submodule sync
   git submodule update --init --recursive
@@ -106,22 +106,25 @@ popd
 Finally, generate the manifests and deploy:
 
 ```
-pushd ~/workspace/ducati-release
-  ~/workspace/cf-release/scripts/generate-bosh-lite-dev-manifest manifests/cf-overrides.yml
+CF_DEPLOY=~/workspace/cf-release/bosh-lite/deployments
+DIEGO_DEPLOY=~/workspace/diego-release/bosh-lite/deployments
 
-  pushd ~/workspace/diego-release
-    ./scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
-  popd
+pushd ~/workspace
+  cf-release/scripts/generate-bosh-lite-dev-manifest ducati-release/manifests/cf-overrides.yml
+
+  diego-release/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
+
+  sed 's/guardian-release/garden-runc-release/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego1.yml
 
   ducatify \
-      --diego ~/workspace/diego-release/bosh-lite/deployments/diego.yml \
-      --cfCreds manifests/cf_creds_stub.yml \
-      > ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml
+      --diego $DIEGO_DEPLOY/diego1.yml \
+      --cfCreds ducati-release/manifests/cf_creds_stub.yml \
+      > $DIEGO_DEPLOY/diego_with_ducati.yml
 popd
 
-bosh -n -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml deploy
-bosh -n -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
+bosh -n -d $CF_DEPLOY/cf.yml deploy
+bosh -n -d $DIEGO_DEPLOY/diego_with_ducati.yml deploy
 
-bosh -d ~/workspace/cf-release/bosh-lite/deployments/cf.yml run errand acceptance_tests
-bosh -d ~/workspace/diego-release/bosh-lite/deployments/diego_with_ducati.yml run errand ducati-acceptance
+bosh -d $CF_DEPLOY/cf.yml run errand acceptance_tests
+bosh -d $DIEGO_DEPLOY/diego_with_ducati.yml run errand ducati-acceptance
 ```
