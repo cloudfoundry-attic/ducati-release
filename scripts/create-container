@@ -2,17 +2,21 @@
 
 set -eu
 
-network_id="test-network-id"
+space_id="test-space-id"
+app_id="test-app-id"
 garden_server="10.244.18.2:7777"
 container_handle=""
 
-while getopts "t:n:h:" opt; do
+while getopts "t:s:a:h:" opt; do
     case ${opt} in
         t)
             garden_server=$OPTARG
             ;;
-        n)
-            network_id=$OPTARG
+        s)
+            space_id=$OPTARG
+            ;;
+        a)
+            app_id=$OPTARG
             ;;
         h)
             container_handle=$OPTARG
@@ -33,7 +37,8 @@ curl -X POST -H 'content-type: application/json' http://${garden_server}/contain
 {
   "Handle": "${container_handle}",
     "Properties": {
-        "garden.external.network-spec": "{ \"network_id\": \"${network_id}\" }"
+        "network.space_id": "${space_id}",
+        "network.app_id": "${app_id}"
     }
 }
 container_json_end

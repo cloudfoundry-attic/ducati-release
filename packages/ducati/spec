@@ -49,6 +49,7 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/nl/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/subscriber/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/models/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/network/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/ossupport/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/sandbox/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/store/*.go # gosub

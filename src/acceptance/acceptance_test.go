@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strconv"
 
@@ -20,8 +21,6 @@ import (
 
 var _ = Describe("Guardian integration with Ducati", func() {
 	const ExternalNetworkSpecKey = "garden.external.network-spec"
-	const networkName = "some-network"
-	const networkSpec = `{"network_id": "` + networkName + `", "app": "foo"}`
 
 	Context("when there is one garden server", func() {
 		var gardenClient1 garden.Client
@@ -30,12 +29,15 @@ var _ = Describe("Guardian integration with Ducati", func() {
 		var ducatiContainer *models.Container
 		var listenPort string
 		var allContainers []models.Container
+		var appID, spaceID string
 
 		BeforeEach(func() {
 			gardenAddress := fmt.Sprintf("%s:7777", gardenServer1)
 			gardenClient1 = garden_client.New(connection.New("tcp", gardenAddress))
 			ducatiClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
 			listenPort = strconv.Itoa(11999 + GinkgoParallelNode())
+			appID = fmt.Sprintf("some-app-%x", rand.Int())
+			spaceID = fmt.Sprintf("some-space-%x", rand.Int())
 
 			var err error
 
@@ -44,13 +46,14 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
 				Properties: garden.Properties{
-					ExternalNetworkSpecKey: networkSpec,
+					"network.app_id":   appID,
+					"network.space_id": spaceID,
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(networkName)
+				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 				if err != nil {
 					return err
 				}
@@ -72,7 +75,7 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			ducatiClient1 := ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
 			Eventually(func() ([]models.Container, error) {
-				containers, err := ducatiClient1.ListNetworkContainers(networkName)
+				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 				return containers, err
 			}, "5s").Should(BeEmpty())
 
@@ -112,13 +115,14 @@ var _ = Describe("Guardian integration with Ducati", func() {
 				var err error
 				gardenContainer2, err = gardenClient1.Create(garden.ContainerSpec{
 					Properties: garden.Properties{
-						ExternalNetworkSpecKey: networkSpec,
+						"network.app_id":   appID,
+						"network.space_id": spaceID,
 					},
 				})
 				Expect(err).NotTo(HaveOccurred())
 
 				Eventually(func() error {
-					containers, err := ducatiClient1.ListNetworkContainers(networkName)
+					containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 					if err != nil {
 						return err
 					}
@@ -178,6 +182,8 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			ducatiContainer  *models.Container
 			ducatiContainer2 *models.Container
+
+			appID, spaceID string
 		)
 
 		BeforeEach(func() {
@@ -190,16 +196,20 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			ducatiClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
 			ducatiClient2 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer2), http.DefaultClient)
 
+			appID = fmt.Sprintf("some-app-%x", rand.Int())
+			spaceID = fmt.Sprintf("some-space-%x", rand.Int())
+
 			var err error
 			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
 				Properties: garden.Properties{
-					ExternalNetworkSpecKey: networkSpec,
+					"network.app_id":   appID,
+					"network.space_id": spaceID,
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(networkName)
+				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 				if err != nil {
 					return err
 				}
@@ -216,13 +226,14 @@ var _ = Describe("Guardian integration with Ducati", func() {
 
 			gardenContainer2, err = gardenClient2.Create(garden.ContainerSpec{
 				Properties: garden.Properties{
-					ExternalNetworkSpecKey: networkSpec,
+					"network.app_id":   appID,
+					"network.space_id": spaceID,
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(networkName)
+				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 				if err != nil {
 					return err
 				}
@@ -246,16 +257,16 @@ var _ = Describe("Guardian integration with Ducati", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() ([]models.Container, error) {
-				containers, err := ducatiClient1.ListNetworkContainers(networkName)
+				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
 				return containers, err
 			}, "5s").Should(BeEmpty())
 		})
 
 		It("should share container metadata across the deployment", func() {
-			containersList1, err := ducatiClient1.ListNetworkContainers(networkName)
+			containersList1, err := ducatiClient1.ListNetworkContainers(spaceID)
 			Expect(err).NotTo(HaveOccurred())
 
-			containersList2, err := ducatiClient2.ListNetworkContainers(networkName)
+			containersList2, err := ducatiClient2.ListNetworkContainers(spaceID)
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(containersList1).To(ConsistOf(containersList2))
