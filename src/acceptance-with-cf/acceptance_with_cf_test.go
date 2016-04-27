@@ -11,7 +11,7 @@ import (
 	"github.com/onsi/gomega/gexec"
 )
 
-const Timeout_Push = 1 * time.Minute
+const Timeout_Push = 5 * time.Minute
 const Timeout_Short = 10 * time.Second
 
 var _ = Describe("Ducati CF acceptance tests", func() {
