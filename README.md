@@ -82,11 +82,11 @@ pushd ~/workspace/cf-release
 popd
 
 pushd ~/workspace/guardian-release
-  git checkout ducati-dev
+  git checkout terrible-hack
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh -n create release --force && bosh -n upload release
+  bosh -n create release --force && bosh -n upload release --rebase
 popd
 
 pushd ~/workspace/ducati-release
@@ -99,8 +99,21 @@ pushd ~/workspace/diego-release
   git checkout ducati-dev
   ./scripts/update
   bosh -n create release
-  bosh upload release
+  bosh upload release --rebase
 popd
+```
+
+After you upload all the releases, verify that you've got the right **Commit Hash**:
+```
++----------+-----------------+-------------+
+| Name     | Versions        | Commit Hash |
++----------+-----------------+-------------+
+| cf       | 235*            | - LATEST -  |
+| diego    | 0.1468.0        | 06d48794    |  <-- this SHA matters
+| ducati   | 0+dev.47*       | - LATEST -  |
+| etcd     | 45*             | - LATEST -  |
+| guardian | 0+dev.6         | f7c6a08e    |  <-- this SHA matters
++----------+-----------------+-------------+
 ```
 
 Finally, generate the manifests and deploy:
