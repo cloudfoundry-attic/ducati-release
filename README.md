@@ -129,8 +129,7 @@ pushd ~/workspace
     scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
   popd
 
-  # only run this if you're using the latest version of garden-runc-release
-  # sed 's/\ guardian/\ garden-runc/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego1.yml
+  sed 's/\ guardian/\ garden-runc/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego.yml
 
   ducatify \
       --diego $DIEGO_DEPLOY/diego.yml \
