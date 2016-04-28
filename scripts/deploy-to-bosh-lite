@@ -16,6 +16,10 @@ target_bosh_lite() {
     bosh target lite || error "bosh target 'lite' is unknown. Please set an alias."
 }
 
+upload_bosh_stemcell() {
+    bosh upload stemcell https://bosh.io/d/stemcells/bosh-warden-boshlite-ubuntu-trusty-go_agent
+}
+
 download_release() {
     local org=$1
     local release=$2
@@ -81,6 +85,10 @@ generate_manifests() {
 main() {
     target_bosh_lite
 
+    if [ $upload_stemcell == true ]; then
+      upload_bosh_stemcell
+    fi
+
     download_release cloudfoundry-incubator etcd-release
     upload_release etcd-release
 
@@ -95,11 +103,16 @@ main() {
     bosh -n -d ${workspace_dir}/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
 }
 
-download_dir=$(mktemp -t -d deploy_bosh_lite.XXXXXXX)
+upload_stemcell=false
+download_dir=$(mktemp -d -t deploy_bosh_lite.XXXXXXX)
 workspace_dir=$(cd $(dirname $0)/../.. && pwd)
 
-while getopts "d:" opt; do
+while getopts "d:w:s" opt; do
     case ${opt} in
+        s)
+            upload_stemcell=true
+        ;;
+
         d)
             download_dir=$OPTARG
         ;;
