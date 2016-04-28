@@ -1,6 +1,7 @@
 package acceptance_test
 
 import (
+	"strings"
 	"time"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -49,11 +50,13 @@ var _ = Describe("Ducati CF acceptance tests", func() {
 			return helpers.CurlApp(proxyApp, "/proxy/"+backendWithoutScheme)
 		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
-		// TODO: uncomment when internal DNS works
-		// By("checking that the backend is reachable via the proxy at its **internal** route")
-		// backendWithoutScheme = "some.internal.route.to.backend.potato"
-		// Eventually(func() string {
-		// 	return helpers.CurlApp(proxyApp, "/proxy/"+backendWithoutScheme)
-		// }, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
+		By("checking that the backend is reachable via the proxy at its **internal** route")
+		session := cf.Cf("app", backendApp, "--guid")
+		Expect(session.Wait(Timeout_Push)).To(gexec.Exit(0))
+		appGuid := strings.TrimSpace(string(session.Out.Contents()))
+		appURL := appGuid + ".cloudfoundry"
+		Eventually(func() string {
+			return helpers.CurlApp(proxyApp, "/proxy/"+appURL+":8080")
+		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 	})
 })

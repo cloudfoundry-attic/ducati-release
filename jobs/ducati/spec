@@ -31,6 +31,10 @@ properties:
     description: "Subnet reserved for the overlay network. This should include daemon local subnet addresses"
     default: 192.168.0.0/16
 
+  ducati.daemon.suffix:
+    description: "suffix for internal name resolution"
+    default: cloudfoundry
+
   ducati.daemon.overlay_dns_address:
     description: "IP address to use for the overlay DNS server"
     default: 192.168.255.254
