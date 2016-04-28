@@ -63,6 +63,7 @@ mkdir -p ~/Downloads/releases
 
 pushd ~/Downloads/releases
   curl -L -o etcd-release.tgz https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release
+  curl -L -o cflinuxfs2-rootfs-release.tgz https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release
 
   bosh upload release etcd-release.tgz
 popd
