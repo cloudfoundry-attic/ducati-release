@@ -76,13 +76,14 @@ popd
 
 pushd ~/workspace/cf-release
   git checkout runtime-passed
+  git pull origin runtime-passed
   ./scripts/update
   bosh -n create release && bosh -n upload release
 popd
 
 pushd ~/workspace/garden-runc-release
   git checkout another-terrible-hack
-  git pull
+  git pull sykesm another-terrible-hack
   git submodule sync
   git submodule update --init --recursive
   bosh -n create release --force && bosh -n upload release
@@ -90,12 +91,14 @@ popd
 
 pushd ~/workspace/ducati-release
   git checkout master
+  git pull origin master
   ./scripts/update
   bosh -n create release --force && bosh -n upload release
 popd
 
 pushd ~/workspace/diego-release
   git checkout release-candidate
+  git pull origin release-candidate
   ./scripts/update
   bosh -n create release
   bosh upload release
