@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,13 +22,17 @@ func (h *Handler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 	getResp, err := http.Get(destination)
 	if err != nil {
-		log.Fatal("request failed")
+		resp.WriteHeader(http.StatusInternalServerError)
+		resp.Write([]byte(fmt.Sprintf("request failed: %s", err)))
+		return
 	}
 	defer getResp.Body.Close()
 
 	readBytes, err := ioutil.ReadAll(getResp.Body)
 	if err != nil {
-		log.Fatal("failed reading response")
+		resp.WriteHeader(http.StatusInternalServerError)
+		resp.Write([]byte(fmt.Sprintf("read body failed: %s", err)))
+		return
 	}
 
 	resp.Write(readBytes)
