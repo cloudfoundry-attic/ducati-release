@@ -66,6 +66,7 @@ pushd ~/Downloads/releases
   curl -L -o cflinuxfs2-rootfs-release.tgz https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release
 
   bosh upload release etcd-release.tgz
+  bosh upload release cflinuxfs2-rootfs-release.tgz
 popd
 
 pushd ~/workspace
