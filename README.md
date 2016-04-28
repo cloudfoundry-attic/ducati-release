@@ -118,10 +118,10 @@ pushd ~/workspace
     scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
   popd
 
-  sed 's/\ guardian/\ garden-runc/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego.yml
+  sed 's/\ guardian/\ garden-runc/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego1.yml
 
   ducatify \
-      --diego $DIEGO_DEPLOY/diego.yml \
+      --diego $DIEGO_DEPLOY/diego1.yml \
       --cfCreds ducati-release/manifests/cf_creds_stub.yml \
       > $DIEGO_DEPLOY/diego_with_ducati.yml
 popd
