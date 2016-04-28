@@ -92,6 +92,9 @@ main() {
     download_release cloudfoundry-incubator etcd-release
     upload_release etcd-release
 
+    download_release cloudfoundry cflinuxfs2-rootfs-release
+    upload_release cflinuxfs2-rootfs-release
+
     update_release cf-release runtime-passed
     update_release diego-release release-candidate
     update_release garden-runc-release another-terrible-hack
