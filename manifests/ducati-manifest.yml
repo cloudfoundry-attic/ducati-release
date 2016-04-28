@@ -5,7 +5,7 @@ name: ducati
 director_uuid: <%= `bosh target lite > /dev/null 2>&1 && bosh status --uuid` %>
 
 releases:
-  - name: guardian
+  - name: garden-runc
     version: latest
   - name: ducati
     version: latest
@@ -297,7 +297,7 @@ jobs:
     instances: 2
     templates:
       - name: garden
-        release: guardian
+        release: garden-runc
       - name: ducati
         release: ducati
       - name: connet

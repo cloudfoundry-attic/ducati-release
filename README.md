@@ -1,6 +1,6 @@
 # ducati-release
 
-This release should be deployed so that the `ducati` job co-locates with the `garden` job from guardian-release.  See below.
+This release should be deployed so that the `ducati` job co-locates with the `garden` job from garden-runc-release.  See below.
 
 ## What you can do
 - [Running tests](#running-tests)
@@ -19,7 +19,7 @@ eval $(docker-machine env dev-box)
 
 ```bash
 bosh target lite
-pushd ~/workspace/guardian-release
+pushd ~/workspace/garden-runc-release
   git pull
   git submodule sync
   git submodule update --init --recursive
@@ -66,27 +66,27 @@ pushd ~/Downloads/releases
   curl -L -o cf-release.tgz https://bosh.io/d/github.com/cloudfoundry/cf-release
 
   bosh upload release etcd-release.tgz
-  bosh upload release cf-release.tgz
 popd
 
 pushd ~/workspace
   git clone https://github.com/sykesm/diego-release
   git clone https://github.com/cloudfoundry/cf-release
   git clone https://github.com/cloudfoundry-incubator/ducati-release
-  git clone https://github.com/sykesm/guardian-release
+  git clone https://github.com/sykesm/garden-runc-release
 popd
 
 pushd ~/workspace/cf-release
   git checkout runtime-passed
   ./scripts/update
+  bosh -n create release && bosh -n upload release
 popd
 
-pushd ~/workspace/guardian-release
-  git checkout terrible-hack
+pushd ~/workspace/garden-runc-release
+  git checkout another-terrible-hack
   git pull
   git submodule sync
   git submodule update --init --recursive
-  bosh -n create release --force && bosh -n upload release --rebase
+  bosh -n create release --force && bosh -n upload release
 popd
 
 pushd ~/workspace/ducati-release
@@ -96,24 +96,11 @@ pushd ~/workspace/ducati-release
 popd
 
 pushd ~/workspace/diego-release
-  git checkout ducati-dev
+  git checkout release-candidate
   ./scripts/update
   bosh -n create release
-  bosh upload release --rebase
+  bosh upload release
 popd
-```
-
-After you upload all the releases, verify that you've got the right **Commit Hash**:
-```
-+----------+-----------------+-------------+
-| Name     | Versions        | Commit Hash |
-+----------+-----------------+-------------+
-| cf       | 235*            | - LATEST -  |
-| diego    | 0.1468.0        | 06d48794    |  <-- this SHA matters
-| ducati   | 0+dev.47*       | - LATEST -  |
-| etcd     | 45*             | - LATEST -  |
-| guardian | 0+dev.6         | f7c6a08e    |  <-- this SHA matters
-+----------+-----------------+-------------+
 ```
 
 Finally, generate the manifests and deploy:
