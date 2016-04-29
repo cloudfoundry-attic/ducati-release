@@ -69,7 +69,6 @@ var _ = Describe("Ducati CF acceptance tests", func() {
 		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
 		By("checking that the backendApp is NOT reachable from a proxy app in a different space")
-		targetSpace(secondSpace)
 		Eventually(func() string {
 			return helpers.CurlApp(proxyApp2, "/proxy/"+appURL+":8080")
 		}, Timeout_Short).Should(ContainSubstring("502 Bad Gateway: Registered endpoint failed to handle the request."))
