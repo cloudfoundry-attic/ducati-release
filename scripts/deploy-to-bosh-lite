@@ -50,6 +50,13 @@ checkout_and_update() {
     local branch=$1
 
     git checkout $branch
+
+    ## verify that the checkout is clean
+    if [ -n "$(git status --porcelain)" ]; then
+      echo "$branch is dirty";
+      exit 1
+    fi
+    git pull
     git submodule sync --recursive && git submodule update --init --recursive
 }
 
