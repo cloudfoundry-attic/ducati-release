@@ -70,7 +70,7 @@ pushd ~/Downloads/releases
 popd
 
 pushd ~/workspace
-  git clone https://github.com/sykesm/diego-release
+  git clone https://github.com/cloudfoundry-incubator/diego-release
   git clone https://github.com/cloudfoundry/cf-release
   git clone https://github.com/cloudfoundry-incubator/ducati-release
   git clone https://github.com/sykesm/garden-runc-release
