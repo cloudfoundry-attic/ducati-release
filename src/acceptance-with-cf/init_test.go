@@ -53,6 +53,7 @@ func pushApp(appName string) {
 		"push", appName,
 		"-p", appDir,
 		"-f", filepath.Join(appDir, "manifest.yml"),
+		"-c", "./proxy",
 		"-b", "binary_buildpack",
 	).Wait(Timeout_Push)).To(gexec.Exit(0))
 }
