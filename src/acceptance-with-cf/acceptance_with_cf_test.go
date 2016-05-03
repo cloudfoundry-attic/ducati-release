@@ -59,24 +59,24 @@ var _ = Describe("Ducati CF acceptance tests", func() {
 	It("makes everything reachable", func() {
 		By("checking that the proxy is reachable via its external route")
 		Eventually(func() string {
-			return helpers.CurlApp(proxyApp, "/")
-		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
+			return helpers.CurlAppWithTimeout(proxyApp, "/", 6*Timeout_Short)
+		}, 6*Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
 		By("checking that the backend is reachable via its external route")
 		Eventually(func() string {
-			return helpers.CurlApp(backendApp, "/")
-		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
+			return helpers.CurlAppWithTimeout(backendApp, "/", 6*Timeout_Short)
+		}, 6*Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
 		By("checking that the backend is reachable via the proxy at its **external** route")
 		backendWithoutScheme := backendApp + "." + helpers.LoadConfig().AppsDomain
 		Eventually(func() string {
-			return helpers.CurlApp(proxyApp, "/proxy/"+backendWithoutScheme)
-		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
+			return helpers.CurlAppWithTimeout(proxyApp, "/proxy/"+backendWithoutScheme, 6*Timeout_Short)
+		}, 6*Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
 		By("checking that the backend is reachable via the proxy at its **internal** route")
 		Eventually(func() string {
-			return helpers.CurlApp(proxyApp, "/proxy/"+backendAppURL+":8080")
-		}, Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
+			return helpers.CurlAppWithTimeout(proxyApp, "/proxy/"+backendAppURL+":8080", 6*Timeout_Short)
+		}, 6*Timeout_Short).Should(ContainSubstring("hello, this is proxy"))
 
 		By("checking that the backendApp is NOT reachable from a proxy app in a different space")
 		Eventually(func() string {
