@@ -13,4 +13,7 @@ export PATH=/var/vcap/packages/cli/bin:${PATH} # put the cli on the path
 export CONFIG=/var/vcap/jobs/acceptance-with-cf/bin/config.json
 
 cd src/acceptance-with-cf
-ginkgo -r
+
+export APP_DIR=./example-apps/proxy
+
+ginkgo -r -v
