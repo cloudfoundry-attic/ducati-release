@@ -7,6 +7,7 @@ dependencies:
 files:
   - github.com/appc/cni/pkg/ns/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace/*.go # gosub
+  - github.com/pivotal-golang/lager/*.go # gosub
   - golang.org/x/sys/unix/*.go # gosub
   - golang.org/x/sys/unix/*.s # gosub
   - utils/netns-exec/*.go # gosub
