@@ -7,10 +7,13 @@ import (
 	"runtime"
 
 	"github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace"
+	"github.com/pivotal-golang/lager"
 )
 
 func main() {
 	runtime.LockOSThread()
+
+	logger := lager.NewLogger("netns-exec")
 
 	if len(os.Args) < 2 {
 		log.Fatalf("first arg: netns path")
@@ -22,7 +25,9 @@ func main() {
 		log.Fatalf("provide a command")
 	}
 
-	pathOpener := &namespace.PathOpener{}
+	pathOpener := &namespace.PathOpener{
+		Logger: logger,
+	}
 	netns, err := pathOpener.OpenPath(netnsPath)
 	if err != nil {
 		log.Fatalf("%s", err)
