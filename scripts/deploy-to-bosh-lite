@@ -81,12 +81,7 @@ generate_manifests() {
     ${workspace_dir}/cf-release/scripts/generate-bosh-lite-dev-manifest \
         ${workspace_dir}/ducati-release/manifests/cf-overrides.yml
 
-    ( cd ${workspace_dir}/diego-release && scripts/generate-bosh-lite-manifests -g )
-
-    ducatify \
-        --diego <( sed 's/\ guardian/\ garden-runc/' < ${workspace_dir}/diego-release/bosh-lite/deployments/diego.yml ) \
-        --cfCreds ${workspace_dir}/ducati-release/manifests/cf_creds_stub.yml \
-        > ${workspace_dir}/diego-release/bosh-lite/deployments/diego_with_ducati.yml
+    ${workspace_dir}/ducati-release/scripts/generate-bosh-lite-manifests
 }
 
 main() {
@@ -110,7 +105,7 @@ main() {
     generate_manifests
 
     bosh -n -d ${workspace_dir}/cf-release/bosh-lite/deployments/cf.yml deploy
-    bosh -n -d ${workspace_dir}/diego-release/bosh-lite/deployments/diego_with_ducati.yml deploy
+    bosh -n -d ${workspace_dir}/ducati-release/bosh-lite/deployments/diego_with_ducati.yml deploy
 }
 
 upload_stemcell=false

@@ -1,6 +1,8 @@
 ---
-api: api.bosh-lite.com
-admin_password: admin
-admin_user: admin
-apps_domain: bosh-lite.com
-skip_ssl_validation: true
+properties:
+  acceptance-with-cf:
+    api: api.bosh-lite.com
+    admin_password: admin
+    admin_user: admin
+    apps_domain: bosh-lite.com
+    skip_ssl_validation: true

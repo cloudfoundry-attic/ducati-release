@@ -111,26 +111,16 @@ Finally, generate the manifests and deploy:
 
 ```
 CF_DEPLOY=~/workspace/cf-release/bosh-lite/deployments
-DIEGO_DEPLOY=~/workspace/diego-release/bosh-lite/deployments
+DUCATI_DEPLOY=~/workspace/ducati-release/bosh-lite/deployments
 
 pushd ~/workspace
   cf-release/scripts/generate-bosh-lite-dev-manifest ducati-release/manifests/cf-overrides.yml
-
-  pushd diego-release
-    scripts/generate-bosh-lite-manifests -g  # use guardian instead of garden-linux
-  popd
-
-  sed 's/\ guardian/\ garden-runc/' < $DIEGO_DEPLOY/diego.yml > $DIEGO_DEPLOY/diego1.yml
-
-  ducatify \
-      --diego $DIEGO_DEPLOY/diego1.yml \
-      --cfCreds ducati-release/manifests/cf_creds_stub.yml \
-      > $DIEGO_DEPLOY/diego_with_ducati.yml
+  ducati-release/scripts/generate-bosh-lite-manifests
 popd
 
 bosh -n -d $CF_DEPLOY/cf.yml deploy
-bosh -n -d $DIEGO_DEPLOY/diego_with_ducati.yml deploy
+bosh -n -d $DUCATI_DEPLOY/diego_with_ducati.yml deploy
 
 bosh -d $CF_DEPLOY/cf.yml run errand acceptance_tests
-bosh -d $DIEGO_DEPLOY/diego_with_ducati.yml run errand ducati-acceptance
+bosh -d $DUCATI_DEPLOY/diego_with_ducati.yml run errand ducati-acceptance
 ```

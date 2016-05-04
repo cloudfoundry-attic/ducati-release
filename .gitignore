@@ -24,6 +24,7 @@ blobs
 *#
 #*
 /.drone.yml
+/bosh-lite
 /cf-release
 /deployments-runtime
 /*.tgz
