@@ -47,14 +47,7 @@ bosh run errand acceptance-tests
 
 ## Deploying with Diego
 
-Install [Ducatify](https://github.com/cloudfoundry-incubator/ducatify/releases)
-
-```bash
-cd ~/go
-go get -u github.com/cloudfoundry-incubator/ducatify/cmd/ducatify
-```
-
-Then get, create, and upload the necessary releases:
+Get, create, and upload the necessary releases:
 
 ```bash
 bosh target lite
