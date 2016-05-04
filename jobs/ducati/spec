@@ -67,6 +67,14 @@ properties:
     description: "SSL security mode.  See http://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING"
     default: require
 
+  ducati.daemon.debug_address:
+    description: "Address of debug server"
+    default: 0.0.0.0:19001
+
+  ducati.daemon.log_level:
+    description: "Log level. Select from debug, info, error, or fatal."
+    default: info
+
   ducati.adapter.cni_plugin_dir:
     description: "Directory containing CNI plugins"
     default: /var/vcap/packages/ducati/bin

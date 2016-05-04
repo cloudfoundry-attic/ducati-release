@@ -95,3 +95,9 @@
 [submodule "src/github.com/google/go-querystring"]
 	path = src/github.com/google/go-querystring
 	url = https://github.com/google/go-querystring
+[submodule "src/github.com/cloudfoundry-incubator/cf-debug-server"]
+	path = src/github.com/cloudfoundry-incubator/cf-debug-server
+	url = https://github.com/cloudfoundry-incubator/cf-debug-server
+[submodule "src/github.com/cloudfoundry-incubator/cf-lager"]
+	path = src/github.com/cloudfoundry-incubator/cf-lager
+	url = https://github.com/cloudfoundry-incubator/cf-lager

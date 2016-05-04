@@ -27,6 +27,8 @@ files:
   - github.com/appc/cni/vendor/github.com/vishvananda/netlink/*.go # gosub
   - github.com/appc/cni/vendor/github.com/vishvananda/netlink/nl/*.go # gosub
   - github.com/bmizerany/pat/*.go # gosub
+  - github.com/cloudfoundry-incubator/cf-debug-server/*.go # gosub
+  - github.com/cloudfoundry-incubator/cf-lager/*.go # gosub
   - github.com/cloudfoundry-incubator/cf-test-helpers/cf/*.go # gosub
   - github.com/cloudfoundry-incubator/cf-test-helpers/helpers/*.go # gosub
   - github.com/cloudfoundry-incubator/cf-test-helpers/runner/*.go # gosub
