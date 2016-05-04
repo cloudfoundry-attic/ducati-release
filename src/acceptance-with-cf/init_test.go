@@ -2,6 +2,7 @@ package acceptance_test
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/cloudfoundry-incubator/cf-test-helpers/cf"
@@ -25,7 +26,11 @@ func TestAcceptance(t *testing.T) {
 		config = helpers.LoadConfig()
 
 		Expect(cf.Cf("api", "--skip-ssl-validation", config.ApiEndpoint).Wait(Timeout_Push)).To(gexec.Exit(0))
-		Expect(cf.Cf("auth", config.AdminUser, config.AdminPassword).Wait(Timeout_Push)).To(gexec.Exit(0))
+
+		cmd := exec.Command("cf", "auth", config.AdminUser, config.AdminPassword)
+		sess, err := gexec.Start(cmd, nil, nil)
+		Expect(err).NotTo(HaveOccurred())
+		Eventually(sess.Wait(Timeout_Push)).Should(gexec.Exit(0))
 
 		appDir = os.Getenv("APP_DIR")
 		Expect(appDir).NotTo(BeEmpty())
