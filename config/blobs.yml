@@ -11,3 +11,7 @@ golang/go1.6.2.linux-amd64.tar.gz:
   object_id: b70fa9a1-6dfb-432b-bab7-5c54ab76ce4f
   sha: b8318b09de06076d5397e6ec18ebef3b45cd315d
   size: 84840658
+flannel/flannel-0.5.5-linux-amd64.tar.gz:
+  object_id: 33468b8e-acb3-4a51-84de-cd6c0e1caf1c
+  sha: fab60fdf23b029fa39badc008fe951bce5046caa
+  size: 3489977

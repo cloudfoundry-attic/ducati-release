@@ -13,9 +13,14 @@ properties:
     api: (( merge || "api.bosh-lite.com" ))
     apps_domain: (( merge || "bosh-lite.com" ))
     skip_ssl_validation: (( merge || true ))
-  connet:
-    daemon:
-      database: (( ducati.daemon.database ))
+  garden:
+    <<: (( merge ))
+    network_plugin: /var/vcap/packages/runc-cni/bin/guardian-cni-adapter
+    network_plugin_extra_args:
+    - --configFile=/var/vcap/jobs/cni-flannel/config/adapter.json
+  flannel:
+    etcd_endpoints:
+      - http://ducati-db.service.cf.internal:4001
   ducati:
     daemon:
       database:
@@ -35,15 +40,6 @@ properties:
       - name: ducati_daemon
         password: some-password
         tag: admin
-  garden:
-    <<: (( merge ))
-    dns_servers:
-    - 192.168.255.254
-    network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
-    network_plugin_extra_args:
-    - --configFile=/var/vcap/jobs/ducati/config/adapter.json
-    shared_mounts:
-    - /var/vcap/data/ducati/container-netns
 
 jobs:
 - name: database_z1
@@ -64,7 +60,14 @@ jobs:
     release: ducati
   - name: consul_agent
     release: cf
+  - name: etcd
+    release: etcd
   properties:
+    etcd:
+      require_ssl: false
+      peer_require_ssl: false
+      machines:
+      - ducati-db.service.cf.internal
     consul:
       agent:
         services:
@@ -80,26 +83,10 @@ jobs:
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
 - name: cc_bridge_z1
   <<: (( merge ))
-  templates:
-  - <<: (( merge ))
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
-  properties:
-    <<: (( merge ))
-    nats: (( .properties.diego.route_emitter.nats ))
-    route_registrar:
-      routes:
-      - name: connet
-        port: 4002
-        registration_interval: 20s
-        uris:
-        - connet.bosh-lite.com
 - name: route_emitter_z1
   <<: (( merge ))
 - name: access_z1
@@ -111,26 +98,10 @@ jobs:
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
 - name: cc_bridge_z2
   <<: (( merge ))
-  templates:
-  - <<: (( merge ))
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
-  properties:
-    <<: (( merge ))
-    nats: (( .properties.diego.route_emitter.nats ))
-    route_registrar:
-      routes:
-      - name: connet
-        port: 4002
-        registration_interval: 20s
-        uris:
-        - connet.bosh-lite.com
 - name: route_emitter_z2
   <<: (( merge ))
 - name: access_z2
@@ -142,26 +113,10 @@ jobs:
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
 - name: cc_bridge_z3
   <<: (( merge ))
-  templates:
-  - <<: (( merge ))
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
-  properties:
-    <<: (( merge ))
-    nats: (( .properties.diego.route_emitter.nats ))
-    route_registrar:
-      routes:
-      - name: connet
-        port: 4002
-        registration_interval: 20s
-        uris:
-        - connet.bosh-lite.com
 - name: route_emitter_z3
   <<: (( merge ))
 - name: access_z3
@@ -171,32 +126,20 @@ jobs:
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
 - name: colocated_z2
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
 - name: colocated_z3
   <<: (( merge ))
   templates:
   - <<: (( merge ))
-  - name: ducati
+  - name: cni-flannel
     release: ducati
-  - name: connet
-    release: ducati
-  - name: route_registrar
-    release: cf
 
 - <<: (( merge ))
 
