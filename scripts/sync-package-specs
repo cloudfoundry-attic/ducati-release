@@ -35,11 +35,18 @@ function sync_package() {
   )
 }
 
+sync_package runc-cni \
+  -app  github.com/cloudfoundry-incubator/guardian-cni-adapter \
+  -app  github.com/appc/cni/plugins/main/bridge \
+  -app  github.com/appc/cni/plugins/ipam/host-local \
+  -app  github.com/appc/cni/plugins/meta/flannel &
+
 sync_package ducati \
   -app  github.com/cloudfoundry-incubator/ducati-cni-plugins/cmd/vxlan \
   -app  github.com/cloudfoundry-incubator/guardian-cni-adapter \
   -app  github.com/appc/cni/plugins/main/bridge \
   -app  github.com/appc/cni/plugins/ipam/host-local \
+  -app  github.com/appc/cni/plugins/meta/flannel \
   -app  github.com/cloudfoundry-incubator/ducati-daemon/cmd/... \
   -test acceptance \
   -test acceptance-with-cf \

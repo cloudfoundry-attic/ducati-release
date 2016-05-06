@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e -u
+
+RUN_DIR=/var/vcap/sys/run/flannel
+LOG_DIR=/var/vcap/sys/log/flannel
+PIDFILE=$RUN_DIR/flanneld.pid
+
+mkdir -p /var/vcap/sys/log/monit
+exec 1>> /var/vcap/sys/log/monit/flanneld.out.log
+exec 2>> /var/vcap/sys/log/monit/flanneld.err.log
+
+mkdir -p /dev/net
+mknod /dev/net/tun c 10 200 || true
+
+case $1 in
+
+  start)
+
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    exec /var/vcap/packages/flannel/bin/flanneld \
+      --log_dir=${LOG_DIR} \
+      --etcd-endpoints=<%= p("flannel.etcd_endpoints").join(",") %> \
+      1>>$LOG_DIR/flanneld.stdout.log \
+      2>>$LOG_DIR/flanneld.stderr.log
+
+    ;;
+
+  stop)
+
+    kill -INT $(cat $PIDFILE)
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

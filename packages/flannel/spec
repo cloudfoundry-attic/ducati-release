@@ -1,0 +1,6 @@
+---
+name: flannel
+
+files:
+  - flannel/flannel-0.5.5-linux-amd64.tar.gz
+
