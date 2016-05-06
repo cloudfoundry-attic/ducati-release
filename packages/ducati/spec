@@ -43,6 +43,7 @@ files:
   - github.com/cloudfoundry-incubator/ducati-daemon/executor/conditions/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/handlers/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/ipam/*.go # gosub
+  - github.com/cloudfoundry-incubator/ducati-daemon/lib/debug/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/ip/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/links/*.go # gosub
   - github.com/cloudfoundry-incubator/ducati-daemon/lib/namespace/*.go # gosub
