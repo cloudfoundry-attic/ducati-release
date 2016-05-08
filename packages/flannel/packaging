@@ -4,8 +4,10 @@ set -e
 set -u
 
 mkdir -p ${BOSH_INSTALL_TARGET}/bin
+cp -a . ${BOSH_INSTALL_TARGET}/src
 
-tar zxvf flannel/flannel-0.5.5-linux-amd64.tar.gz
+export GOROOT=$(readlink -nf /var/vcap/packages/golang)
+export GOPATH=$BOSH_INSTALL_TARGET
+export PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 
-mv flannel-0.5.5/* ${BOSH_INSTALL_TARGET}/bin
-mv ${BOSH_INSTALL_TARGET}/bin/README.md ${BOSH_INSTALL_TARGET}/
+go build -o ${BOSH_INSTALL_TARGET}/bin/flanneld github.com/coreos/flannel
