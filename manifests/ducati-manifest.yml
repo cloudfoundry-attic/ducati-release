@@ -25,7 +25,7 @@ networks:
           name: random
 
 properties:
-  flannel:
+  cni-flannel:
     etcd_endpoints:
       - http://10.244.18.9:4001
   garden:

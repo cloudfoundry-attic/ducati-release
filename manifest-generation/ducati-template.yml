@@ -18,7 +18,7 @@ properties:
     network_plugin: /var/vcap/packages/runc-cni/bin/guardian-cni-adapter
     network_plugin_extra_args:
     - --configFile=/var/vcap/jobs/cni-flannel/config/adapter.json
-  flannel:
+  cni-flannel:
     etcd_endpoints:
       - http://ducati-db.service.cf.internal:4001
   ducati:

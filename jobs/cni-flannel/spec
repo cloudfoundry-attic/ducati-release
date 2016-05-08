@@ -13,9 +13,13 @@ packages:
   - runc-cni
 
 properties:
-  flannel.etcd_endpoints:
+  cni-flannel.etcd_endpoints:
     description: "a list of etcd endpoints"
     default: []
+
+  cni-flannel.overlay_cidr:
+    description: "CIDR block for overlay network.  Should be /16"
+    default: "10.255.0.0/16"
 
   cni-flannel.adapter.cni_plugin_dir:
     description: "Directory containing CNI plugins"
