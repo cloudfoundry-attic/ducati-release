@@ -2,316 +2,109 @@ package acceptance_test
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
+	"io"
 	"math/rand"
-	"net/http"
-	"strconv"
+	"time"
 
 	"github.com/cloudfoundry-incubator/garden"
 	"github.com/cloudfoundry-incubator/garden/client/connection"
 
-	ducati_client "github.com/cloudfoundry-incubator/ducati-daemon/client"
-	"github.com/cloudfoundry-incubator/ducati-daemon/models"
 	garden_client "github.com/cloudfoundry-incubator/garden/client"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Guardian integration with Ducati", func() {
+var _ = Describe("Container networking", func() {
 	const ExternalNetworkSpecKey = "garden.external.network-spec"
+	const cmdGetContainerIP = `ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}' | tr -d '\n'`
 
-	Context("when there is one garden server", func() {
-		var gardenClient1 garden.Client
-		var ducatiClient1 *ducati_client.DaemonClient
-		var gardenContainer garden.Container
-		var ducatiContainer *models.Container
-		var listenPort string
-		var allContainers []models.Container
-		var appID, spaceID string
+	var (
+		gardenClient1 garden.Client
+		gardenClient2 garden.Client
 
-		BeforeEach(func() {
-			gardenAddress := fmt.Sprintf("%s:7777", gardenServer1)
-			gardenClient1 = garden_client.New(connection.New("tcp", gardenAddress))
-			ducatiClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
-			listenPort = strconv.Itoa(11999 + GinkgoParallelNode())
-			appID = fmt.Sprintf("some-app-%x", rand.Int())
-			spaceID = fmt.Sprintf("some-space-%x", rand.Int())
+		gardenContainer1 garden.Container
+		gardenContainer2 garden.Container
 
-			var err error
+		containerAddr1, containerAddr2 string
 
-			allContainers, err = ducatiClient1.ListContainers()
-			Expect(err).NotTo(HaveOccurred())
+		appID, spaceID string
+	)
 
-			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
-				Properties: garden.Properties{
-					"network.app_id":   appID,
-					"network.space_id": spaceID,
-				},
-			})
-			Expect(err).NotTo(HaveOccurred())
+	BeforeEach(func() {
+		gardenClient1 = garden_client.New(connection.New("tcp", fmt.Sprintf("%s:7777", gardenServer1)))
+		gardenClient2 = garden_client.New(connection.New("tcp", fmt.Sprintf("%s:7777", gardenServer2)))
 
-			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-				if err != nil {
-					return err
-				}
+		appID = fmt.Sprintf("some-app-%x", rand.Int())
+		spaceID = fmt.Sprintf("some-space-%x", rand.Int())
 
-				for _, c := range containers {
-					if c.ID == gardenContainer.Handle() {
-						ducatiContainer = &c
-						return nil
-					}
-				}
-
-				return errors.New("container not found")
-			}, "5s").Should(Succeed())
+		var err error
+		gardenContainer1, err = gardenClient1.Create(garden.ContainerSpec{
+			Properties: garden.Properties{
+				"network.app_id":   appID,
+				"network.space_id": spaceID,
+			},
 		})
+		Expect(err).NotTo(HaveOccurred())
+		containerAddr1 = runInContainer(gardenContainer1, cmdGetContainerIP)
 
-		AfterEach(func() {
-			err := gardenClient1.Destroy(gardenContainer.Handle())
-			Expect(err).NotTo(HaveOccurred())
-
-			ducatiClient1 := ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
-			Eventually(func() ([]models.Container, error) {
-				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-				return containers, err
-			}, "5s").Should(BeEmpty())
-
-			leftOverContainers, err := ducatiClient1.ListContainers()
-			Expect(err).NotTo(HaveOccurred())
-			Expect(allContainers).To(Equal(leftOverContainers))
+		gardenContainer2, err = gardenClient2.Create(garden.ContainerSpec{
+			Properties: garden.Properties{
+				"network.app_id":   appID,
+				"network.space_id": spaceID,
+			},
 		})
-
-		It("should create the interface", func() {
-			ifconfigProcess := garden.ProcessSpec{
-				Path: "/sbin/ifconfig",
-				Args: []string{"-a"},
-				User: "root",
-			}
-
-			stdout := &bytes.Buffer{}
-			stderr := &bytes.Buffer{}
-			ifconfigProcessIO := garden.ProcessIO{
-				Stdin:  &bytes.Buffer{},
-				Stdout: stdout,
-				Stderr: stderr,
-			}
-
-			process, err := gardenContainer.Run(ifconfigProcess, ifconfigProcessIO)
-			Expect(err).NotTo(HaveOccurred())
-			Eventually(process.Wait).Should(Equal(0))
-
-			output := stdout.String()
-			Expect(output).To(ContainSubstring("eth0"))
-		})
-
-		It("should use the network properties to configure the container", func() {
-			By("checking that the app id propagates")
-			Expect(ducatiContainer.App).To(Equal(appID))
-
-			By("checking that the space id is used as the network id")
-			Expect(ducatiContainer.NetworkID).To(Equal(spaceID))
-		})
-
-		Context("when containers share a network", func() {
-			var gardenContainer2 garden.Container
-			var ducatiContainer2 *models.Container
-
-			BeforeEach(func() {
-				var err error
-				gardenContainer2, err = gardenClient1.Create(garden.ContainerSpec{
-					Properties: garden.Properties{
-						"network.app_id":   appID,
-						"network.space_id": spaceID,
-					},
-				})
-				Expect(err).NotTo(HaveOccurred())
-
-				Eventually(func() error {
-					containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-					if err != nil {
-						return err
-					}
-
-					for _, c := range containers {
-						if c.ID == gardenContainer2.Handle() {
-							ducatiContainer2 = &c
-							return nil
-						}
-					}
-
-					return errors.New("container not found")
-				}, "5s").Should(Succeed())
-			})
-
-			AfterEach(func() {
-				err := gardenClient1.Destroy(gardenContainer2.Handle())
-				Expect(err).NotTo(HaveOccurred())
-			})
-
-			It("connects the containers", func() {
-				By("pinging from container 1 to container 2")
-				pingContainer2 := garden.ProcessSpec{
-					Path: "/bin/ping",
-					Args: []string{"-c3", ducatiContainer2.IP},
-					User: "root",
-				}
-
-				process, err := gardenContainer.Run(pingContainer2, garden.ProcessIO{})
-				Expect(err).NotTo(HaveOccurred())
-				Eventually(process.Wait).Should(Equal(0))
-
-				By("pinging from container 2 to container 1")
-				pingContainer1 := garden.ProcessSpec{
-					Path: "/bin/ping",
-					Args: []string{"-c3", ducatiContainer.IP},
-					User: "root",
-				}
-
-				process, err = gardenContainer2.Run(pingContainer1, garden.ProcessIO{})
-				Expect(err).NotTo(HaveOccurred())
-				Eventually(process.Wait).Should(Equal(0))
-			})
-		})
+		Expect(err).NotTo(HaveOccurred())
+		containerAddr2 = runInContainer(gardenContainer2, cmdGetContainerIP)
 	})
 
-	Context("when there are two garden servers", func() {
-		var (
-			gardenClient1 garden.Client
-			gardenClient2 garden.Client
+	AfterEach(func() {
+		err := gardenClient1.Destroy(gardenContainer1.Handle())
+		Expect(err).NotTo(HaveOccurred())
 
-			ducatiClient1 *ducati_client.DaemonClient
-			ducatiClient2 *ducati_client.DaemonClient
+		err = gardenClient2.Destroy(gardenContainer2.Handle())
+		Expect(err).NotTo(HaveOccurred())
+	})
 
-			gardenContainer  garden.Container
-			gardenContainer2 garden.Container
+	It("connects the containers", func() {
+		By("pinging from container 1 to container 2")
+		runInContainer(gardenContainer1, `ping -c3 `+containerAddr2)
 
-			ducatiContainer  *models.Container
-			ducatiContainer2 *models.Container
+		By("running a shasum server on container 2")
+		go func() {
+			defer GinkgoRecover()
+			runInContainer(gardenContainer2, fmt.Sprintf(`nc -l -p 9999 %s -e sha1sum`, containerAddr2))
+		}()
 
-			appID, spaceID string
-		)
+		time.Sleep(500 * time.Millisecond)
 
-		BeforeEach(func() {
-			gardenAddress1 := fmt.Sprintf("%s:7777", gardenServer1)
-			gardenAddress2 := fmt.Sprintf("%s:7777", gardenServer2)
-
-			gardenClient1 = garden_client.New(connection.New("tcp", gardenAddress1))
-			gardenClient2 = garden_client.New(connection.New("tcp", gardenAddress2))
-
-			ducatiClient1 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer1), http.DefaultClient)
-			ducatiClient2 = ducati_client.New(fmt.Sprintf("http://%s:4001", gardenServer2), http.DefaultClient)
-
-			appID = fmt.Sprintf("some-app-%x", rand.Int())
-			spaceID = fmt.Sprintf("some-space-%x", rand.Int())
-
-			var err error
-			gardenContainer, err = gardenClient1.Create(garden.ContainerSpec{
-				Properties: garden.Properties{
-					"network.app_id":   appID,
-					"network.space_id": spaceID,
-				},
-			})
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-				if err != nil {
-					return err
-				}
-
-				for _, c := range containers {
-					if c.ID == gardenContainer.Handle() {
-						ducatiContainer = &c
-						return nil
-					}
-				}
-
-				return errors.New("container not found")
-			}, "5s").Should(Succeed())
-
-			gardenContainer2, err = gardenClient2.Create(garden.ContainerSpec{
-				Properties: garden.Properties{
-					"network.app_id":   appID,
-					"network.space_id": spaceID,
-				},
-			})
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(func() error {
-				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-				if err != nil {
-					return err
-				}
-
-				for _, c := range containers {
-					if c.ID == gardenContainer2.Handle() {
-						ducatiContainer2 = &c
-						return nil
-					}
-				}
-
-				return errors.New("container not found")
-			}, "5s").Should(Succeed())
-		})
-
-		AfterEach(func() {
-			err := gardenClient1.Destroy(gardenContainer.Handle())
-			Expect(err).NotTo(HaveOccurred())
-
-			err = gardenClient2.Destroy(gardenContainer2.Handle())
-			Expect(err).NotTo(HaveOccurred())
-
-			Eventually(func() ([]models.Container, error) {
-				containers, err := ducatiClient1.ListNetworkContainers(spaceID)
-				return containers, err
-			}, "5s").Should(BeEmpty())
-		})
-
-		It("should share container metadata across the deployment", func() {
-			containersList1, err := ducatiClient1.ListNetworkContainers(spaceID)
-			Expect(err).NotTo(HaveOccurred())
-
-			containersList2, err := ducatiClient2.ListNetworkContainers(spaceID)
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(containersList1).To(ConsistOf(containersList2))
-		})
-
-		It("connects the containers", func() {
-			By("pinging from container 1 to container 2")
-			pingContainer2 := garden.ProcessSpec{
-				Path: "/bin/ping",
-				Args: []string{"-c3", ducatiContainer2.IP},
-				User: "root",
-			}
-
-			GinkgoWriter.Write([]byte("ping container 2\n"))
-			process, err := gardenContainer.Run(pingContainer2, ginkgoProcIO())
-			Expect(err).NotTo(HaveOccurred())
-			Eventually(process.Wait).Should(Equal(0))
-
-			By("pinging from container 2 to container 1")
-			pingContainer1 := garden.ProcessSpec{
-				Path: "/bin/ping",
-				Args: []string{"-c3", ducatiContainer.IP},
-				User: "root",
-			}
-
-			GinkgoWriter.Write([]byte("ping container 1\n"))
-			process, err = gardenContainer2.Run(pingContainer1, ginkgoProcIO())
-			Expect(err).NotTo(HaveOccurred())
-			Eventually(process.Wait).Should(Equal(0))
-		})
+		By("using container 1 as a client, requesting a shasum for some random data")
+		expectedSha := runInContainer(gardenContainer1, `cat /dev/urandom | head -c 1000 | tee testdata | sha1sum`)
+		computedSha := runInContainer(gardenContainer1, fmt.Sprintf(`cat testdata | nc %s 9999`, containerAddr2))
+		Expect(computedSha).To(Equal(expectedSha))
 	})
 })
 
-func ginkgoProcIO() garden.ProcessIO {
-	return garden.ProcessIO{
+func runInContainer(container garden.Container, shellCmd string) string {
+	GinkgoWriter.Write([]byte(container.Handle() + ": " + shellCmd + "\n"))
+	procSpec := garden.ProcessSpec{
+		Path: "/bin/sh",
+		Args: []string{"-c", shellCmd},
+		User: "root",
+	}
+
+	stdout := &bytes.Buffer{}
+
+	procIO := garden.ProcessIO{
 		Stdin:  &bytes.Buffer{},
-		Stdout: GinkgoWriter,
+		Stdout: io.MultiWriter(stdout, GinkgoWriter),
 		Stderr: GinkgoWriter,
 	}
+	process, err := container.Run(procSpec, procIO)
+	Expect(err).NotTo(HaveOccurred())
+	Eventually(process.Wait).Should(Equal(0))
+
+	GinkgoWriter.Write([]byte("\n" + container.Handle() + ": done \n"))
+	return stdout.String()
 }

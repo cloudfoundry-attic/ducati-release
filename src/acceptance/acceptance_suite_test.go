@@ -18,7 +18,6 @@ func TestAcceptance(t *testing.T) {
 }
 
 var gardenServer1, gardenServer2 string
-var pathToDucatiDNSBinary string
 
 var _ = BeforeSuite(func() {
 	gardenServer1 = os.Getenv("GARDEN_SERVER_1")
@@ -29,10 +28,6 @@ var _ = BeforeSuite(func() {
 	if gardenServer2 == "" {
 		Fail("missing required env var GARDEN_SERVER_2")
 	}
-
-	var err error
-	pathToDucatiDNSBinary, err = gexec.Build("github.com/cloudfoundry-incubator/ducati-dns/cmd/ducati-dns")
-	Expect(err).NotTo(HaveOccurred())
 
 	rand.Seed(config.GinkgoConfig.RandomSeed + int64(config.GinkgoConfig.ParallelNode))
 })
