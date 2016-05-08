@@ -21,9 +21,13 @@ case $1 in
 
     echo $$ > $PIDFILE
 
+    keyURL=<%= p("cni-flannel.etcd_endpoints")[0] %>/v2/keys/coreos.com/network/config
+
     curl -v \
-      <%= p("cni-flannel.etcd_endpoints")[0] %>/v2/keys/coreos.com/network/config \
-      -XPUT -d value='{ "Network": "<%= p("cni-flannel.overlay_cidr") %>" }' \
+      $keyURL \
+      -XPUT -d value='<%=
+      require 'json'
+      JSON.pretty_generate(p("cni-flannel.flannel")) %>' \
       1>>$LOG_DIR/flanneld.stdout.log \
       2>>$LOG_DIR/flanneld.stderr.log
 
