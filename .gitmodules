@@ -103,4 +103,7 @@
 	url = https://github.com/cloudfoundry-incubator/cf-lager
 [submodule "src/github.com/coreos/flannel"]
 	path = src/github.com/coreos/flannel
-	url = https://github.com/coreos/flannel
+	url = https://github.com/rosenhouse/flannel
+[submodule "src/github.com/songgao/water"]
+	path = src/github.com/songgao/water
+	url = https://github.com/songgao/water
