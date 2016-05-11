@@ -15,7 +15,7 @@ eval $(docker-machine env dev-box)
 ~/workspace/ducati-release/scripts/docker-test
 ```
 
-## Deploy and test in isolation
+## Deploy and Test in Isolation
 
 ```bash
 bosh target lite
@@ -45,75 +45,29 @@ bosh -n deploy
 bosh run errand acceptance-tests
 ```
 
-## Deploying with Diego
+## Deploying And Testing with Diego
 
-Get, create, and upload the necessary releases:
+Clone the necessary repositories:
 
 ```bash
-bosh target lite
-
-mkdir -p ~/Downloads/releases
-
-pushd ~/Downloads/releases
-  curl -L -o etcd-release.tgz https://bosh.io/d/github.com/cloudfoundry-incubator/etcd-release
-  curl -L -o cflinuxfs2-rootfs-release.tgz https://bosh.io/d/github.com/cloudfoundry/cflinuxfs2-rootfs-release
-
-  bosh upload release etcd-release.tgz
-  bosh upload release cflinuxfs2-rootfs-release.tgz
-popd
-
 pushd ~/workspace
   git clone https://github.com/cloudfoundry-incubator/diego-release
   git clone https://github.com/cloudfoundry/cf-release
   git clone https://github.com/cloudfoundry-incubator/ducati-release
-  git clone https://github.com/sykesm/garden-runc-release
+  git clone https://github.com/cloudfoundry-incubator/garden-runc-release
 popd
+```
 
-pushd ~/workspace/cf-release
-  git checkout runtime-passed
-  git pull origin runtime-passed
-  ./scripts/update
-  bosh -n create release && bosh -n upload release
-popd
+Run the deploy script
 
-pushd ~/workspace/garden-runc-release
-  git checkout another-terrible-hack
-  git pull sykesm another-terrible-hack
-  git submodule sync
-  git submodule update --init --recursive
-  bosh -n create release --force && bosh -n upload release
-popd
-
+```bash
 pushd ~/workspace/ducati-release
-  git checkout master
-  git pull origin master
-  ./scripts/update
-  bosh -n create release --force && bosh -n upload release
-popd
-
-pushd ~/workspace/diego-release
-  git checkout release-candidate
-  git pull origin release-candidate
-  ./scripts/update
-  bosh -n create release
-  bosh upload release
+  ./scripts/deploy-to-bosh-lite
 popd
 ```
 
-Finally, generate the manifests and deploy:
+Finally, run the acceptance errand:
 
-```
-CF_DEPLOY=~/workspace/cf-release/bosh-lite/deployments
-DUCATI_DEPLOY=~/workspace/ducati-release/bosh-lite/deployments
-
-pushd ~/workspace
-  cf-release/scripts/generate-bosh-lite-dev-manifest ducati-release/manifests/cf-overrides.yml
-  ducati-release/scripts/generate-bosh-lite-manifests
-popd
-
-bosh -n -d $CF_DEPLOY/cf.yml deploy
-bosh -n -d $DUCATI_DEPLOY/diego_with_ducati.yml deploy
-
-bosh -d $CF_DEPLOY/cf.yml run errand acceptance_tests
-bosh -d $DUCATI_DEPLOY/diego_with_ducati.yml run errand ducati-acceptance
+```bash
+bosh run errand ducati-acceptance
 ```

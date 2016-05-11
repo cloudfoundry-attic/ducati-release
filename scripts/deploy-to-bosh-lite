@@ -98,8 +98,8 @@ main() {
     upload_release cflinuxfs2-rootfs-release
 
     update_release cf-release runtime-passed
-    update_release diego-release release-candidate
-    update_release garden-runc-release another-terrible-hack
+    update_release diego-release master
+    update_release garden-runc-release master
     update_release ducati-release master
 
     generate_manifests
