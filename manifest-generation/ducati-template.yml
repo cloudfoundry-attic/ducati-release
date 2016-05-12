@@ -38,8 +38,8 @@ properties:
   garden:
     <<: (( merge ))
     dns_servers:
-    - 8.8.8.8
     - 192.168.255.254
+    - 8.8.8.8
     network_plugin: /var/vcap/packages/ducati/bin/guardian-cni-adapter
     network_plugin_extra_args:
     - --configFile=/var/vcap/jobs/ducati/config/adapter.json
